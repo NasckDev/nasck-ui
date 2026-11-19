@@ -18,7 +18,7 @@
 }
 
 .nui-switch__track[aria-checked='true'] {
-  background: var(--nui-color-accent);
+  background: var(--nui-color-primary);
 }
 
 .nui-switch__thumb {
@@ -27,7 +27,7 @@
   left: 3px;
   width: 1.125rem;
   height: 1.125rem;
-  background: var(--nui-color-bg);
+  background: var(--nui-color-text-on-primary);
   border-radius: var(--nui-radius-full);
   box-shadow: var(--nui-shadow-sm);
   transition: transform var(--nui-motion-duration-normal) var(--nui-motion-easing-emphasized);

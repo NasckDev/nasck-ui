@@ -1,0 +1,85 @@
+.nui-accordion {
+  font-family: var(--nui-font-family-sans);
+  color: var(--nui-color-text);
+  border-top: 1px solid var(--nui-color-border);
+}
+
+.nui-accordion__item {
+  border-bottom: 1px solid var(--nui-color-border);
+}
+
+.nui-accordion__heading {
+  margin: 0;
+  font: inherit;
+}
+
+.nui-accordion__trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--nui-space-4);
+  width: 100%;
+  min-height: 3rem;
+  padding: var(--nui-space-3) var(--nui-space-1);
+  font-family: var(--nui-font-family-display);
+  font-size: var(--nui-font-size-md);
+  font-weight: var(--nui-font-weight-semibold);
+  color: inherit;
+  text-align: start;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nui-accordion__trigger:hover:not(:disabled) .nui-accordion__title {
+  text-decoration: underline;
+  text-decoration-color: var(--nui-color-accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+
+.nui-accordion__trigger:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.nui-accordion__chevron {
+  flex-shrink: 0;
+  width: 0.5rem;
+  height: 0.5rem;
+  margin-inline-end: var(--nui-space-1);
+  border: solid currentColor;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--nui-motion-duration-normal) var(--nui-motion-easing-standard);
+}
+
+.nui-accordion__item[data-open='true'] .nui-accordion__chevron {
+  transform: rotate(-135deg) translate(-2px, -2px);
+}
+
+/* Grid-row animation: height transitions without measuring; hidden content leaves the a11y tree. */
+.nui-accordion__panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  visibility: hidden;
+  transition:
+    grid-template-rows var(--nui-motion-duration-normal) var(--nui-motion-easing-standard),
+    visibility 0s linear var(--nui-motion-duration-normal);
+}
+
+.nui-accordion__item[data-open='true'] .nui-accordion__panel {
+  grid-template-rows: 1fr;
+  visibility: visible;
+  transition-delay: 0s;
+}
+
+.nui-accordion__panel-inner {
+  min-height: 0;
+  overflow: hidden;
+}
+
+.nui-accordion__content {
+  padding: 0 var(--nui-space-1) var(--nui-space-4);
+  color: var(--nui-color-text-muted);
+}

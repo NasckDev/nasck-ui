@@ -36,6 +36,7 @@
 }
 
 .nui-dialog__title {
+  font-family: var(--nui-font-family-display);
   margin: 0;
   font-size: var(--nui-font-size-xl);
   font-weight: var(--nui-font-weight-semibold);

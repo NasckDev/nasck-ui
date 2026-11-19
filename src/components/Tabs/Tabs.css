@@ -13,6 +13,7 @@
   position: relative;
   padding: var(--nui-space-2) var(--nui-space-4);
   font: inherit;
+  font-family: var(--nui-font-family-display);
   font-weight: var(--nui-font-weight-medium);
   color: var(--nui-color-text-muted);
   background: transparent;
@@ -22,16 +23,15 @@
 }
 
 .nui-tabs__tab[aria-selected='true'] {
-  color: var(--nui-color-accent);
+  color: var(--nui-color-text);
 }
 
 .nui-tabs__tab[aria-selected='true']::after {
   content: '';
   position: absolute;
   inset: auto 0 -1px;
-  height: 3px;
-  background: currentColor;
-  border-radius: var(--nui-radius-full);
+  height: 2px;
+  background: var(--nui-color-accent);
 }
 
 .nui-tabs__tab:disabled {

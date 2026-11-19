@@ -1,0 +1,183 @@
+.nui-table-wrap {
+  container-type: inline-size;
+  font-family: var(--nui-font-family-sans);
+  color: var(--nui-color-text);
+  border: 1px solid var(--nui-color-border);
+  border-radius: var(--nui-radius-md);
+  background: var(--nui-color-surface-raised);
+}
+
+.nui-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--nui-font-size-sm);
+}
+
+.nui-table__caption {
+  padding: var(--nui-space-3) var(--nui-space-4);
+  font-family: var(--nui-font-family-display);
+  font-weight: var(--nui-font-weight-semibold);
+  text-align: start;
+  border-bottom: 1px solid var(--nui-color-border);
+}
+
+.nui-table__th {
+  padding: 0 var(--nui-space-4);
+  font-family: var(--nui-font-family-mono);
+  font-size: var(--nui-font-size-xs);
+  font-weight: var(--nui-font-weight-regular);
+  letter-spacing: 0.04em;
+  text-align: start;
+  text-transform: uppercase;
+  color: var(--nui-color-text-muted);
+  background: var(--nui-color-surface);
+  border-bottom: 1px solid var(--nui-color-border);
+}
+
+.nui-table__th:not(:has(button)) {
+  padding-block: var(--nui-space-3);
+}
+
+.nui-table__th[data-align='end'],
+.nui-table__td[data-align='end'] {
+  text-align: end;
+}
+
+.nui-table__th[data-align='end'] .nui-table__sort {
+  margin-inline-start: auto;
+}
+
+.nui-table__sort {
+  display: flex;
+  align-items: center;
+  gap: var(--nui-space-2);
+  min-height: 2.75rem;
+  padding: 0;
+  font: inherit;
+  letter-spacing: inherit;
+  color: inherit;
+  text-transform: inherit;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+}
+
+.nui-table__sort:hover {
+  color: var(--nui-color-text);
+}
+
+.nui-table__sort-icon {
+  width: 0.5rem;
+  height: 0.75rem;
+  background:
+    linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat,
+    transparent;
+  opacity: 0.45;
+  clip-path: polygon(50% 0, 100% 35%, 0 35%, 50% 0, 50% 100%, 100% 65%, 0 65%, 50% 100%);
+}
+
+.nui-table__sort-icon[data-direction] {
+  opacity: 1;
+  color: var(--nui-color-accent-text);
+}
+
+.nui-table__sort-icon[data-direction='ascending'] {
+  clip-path: polygon(50% 0, 100% 45%, 0 45%);
+  background: currentColor;
+}
+
+.nui-table__sort-icon[data-direction='descending'] {
+  clip-path: polygon(0 55%, 100% 55%, 50% 100%);
+  background: currentColor;
+}
+
+.nui-table__td {
+  padding: var(--nui-space-3) var(--nui-space-4);
+  font-weight: var(--nui-font-weight-regular);
+  text-align: start;
+  vertical-align: middle;
+  border-bottom: 1px solid var(--nui-color-border);
+}
+
+.nui-table__td--head {
+  font-weight: var(--nui-font-weight-semibold);
+}
+
+.nui-table__row {
+  transition: background-color var(--nui-motion-duration-fast) var(--nui-motion-easing-standard);
+}
+
+.nui-table__row:hover {
+  background: var(--nui-color-surface);
+}
+
+.nui-table tbody tr:last-child .nui-table__td {
+  border-bottom: none;
+}
+
+.nui-table__empty {
+  padding: var(--nui-space-10) var(--nui-space-4);
+  color: var(--nui-color-text-muted);
+  text-align: center;
+}
+
+/* Narrow containers: each row becomes a card with "label: value" lines. */
+@container (max-width: 40rem) {
+  .nui-table,
+  .nui-table tbody,
+  .nui-table tr,
+  .nui-table td,
+  .nui-table th.nui-table__td {
+    display: block;
+  }
+
+  .nui-table__head {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+  }
+
+  .nui-table__row {
+    padding: var(--nui-space-2) 0;
+    border-bottom: 1px solid var(--nui-color-border);
+  }
+
+  .nui-table tbody tr:last-child {
+    border-bottom: none;
+  }
+
+  .nui-table__td,
+  .nui-table tbody tr:last-child .nui-table__td {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--nui-space-4);
+    padding: var(--nui-space-2) var(--nui-space-4);
+    text-align: end;
+    border-bottom: none;
+  }
+
+  .nui-table__td::before {
+    flex-shrink: 0;
+    content: attr(data-label);
+    font-family: var(--nui-font-family-mono);
+    font-size: var(--nui-font-size-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--nui-color-text-muted);
+    text-align: start;
+  }
+
+  .nui-table__td--head {
+    font-family: var(--nui-font-family-display);
+    font-size: var(--nui-font-size-md);
+  }
+}
+
+@container (max-width: 40rem) {
+  .nui-table__td--head::before {
+    display: none;
+  }
+}

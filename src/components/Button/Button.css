@@ -1,8 +1,8 @@
 .nui-button {
-  --nui-button-bg: var(--nui-color-accent);
-  --nui-button-fg: var(--nui-color-text-on-accent);
+  --nui-button-bg: var(--nui-color-primary);
+  --nui-button-fg: var(--nui-color-text-on-primary);
   --nui-button-border: transparent;
-  --nui-button-bg-hover: var(--nui-color-accent-hover);
+  --nui-button-bg-hover: var(--nui-color-primary-hover);
 
   display: inline-flex;
   align-items: center;
@@ -10,9 +10,10 @@
   gap: var(--nui-space-2);
   min-height: 2.5rem;
   padding: 0 var(--nui-space-4);
-  font-family: var(--nui-font-family-sans);
+  font-family: var(--nui-font-family-display);
   font-size: var(--nui-font-size-md);
   font-weight: var(--nui-font-weight-semibold);
+  letter-spacing: -0.005em;
   line-height: var(--nui-font-line-height-tight);
   color: var(--nui-button-fg);
   background: var(--nui-button-bg);
@@ -21,7 +22,12 @@
   cursor: pointer;
   transition:
     background-color var(--nui-motion-duration-fast) var(--nui-motion-easing-standard),
-    box-shadow var(--nui-motion-duration-fast) var(--nui-motion-easing-standard);
+    box-shadow var(--nui-motion-duration-fast) var(--nui-motion-easing-standard),
+    transform var(--nui-motion-duration-fast) var(--nui-motion-easing-standard);
+}
+
+.nui-button:active:not(:disabled, [aria-disabled='true']) {
+  transform: scale(0.98);
 }
 
 .nui-button:hover:not(:disabled, [aria-disabled='true']) {
@@ -37,8 +43,8 @@
 
 .nui-button[data-variant='ghost'] {
   --nui-button-bg: transparent;
-  --nui-button-fg: var(--nui-color-accent);
-  --nui-button-bg-hover: var(--nui-color-accent-surface);
+  --nui-button-fg: var(--nui-color-text);
+  --nui-button-bg-hover: var(--nui-color-surface);
 }
 
 .nui-button[data-variant='danger'] {
