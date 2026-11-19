@@ -1,0 +1,24 @@
+.nui-icon-button,
+.nui-icon-button[data-size] {
+  padding: 0;
+}
+
+.nui-icon-button {
+  width: 2.5rem;
+  min-height: 2.5rem;
+}
+
+.nui-icon-button[data-size='sm'] {
+  width: 2rem;
+  min-height: 2rem;
+}
+
+.nui-icon-button[data-size='lg'] {
+  width: 3rem;
+  min-height: 3rem;
+}
+
+.nui-icon-button__icon {
+  display: inline-flex;
+  line-height: 0;
+}

@@ -1,0 +1,41 @@
+.nui-badge {
+  --nui-badge-fg: var(--nui-color-text);
+  --nui-badge-bg: var(--nui-color-surface);
+
+  display: inline-flex;
+  align-items: center;
+  padding: 0.125rem var(--nui-space-2);
+  font-family: var(--nui-font-family-sans);
+  font-size: var(--nui-font-size-xs);
+  font-weight: var(--nui-font-weight-semibold);
+  line-height: var(--nui-font-line-height-normal);
+  color: var(--nui-badge-fg);
+  background: var(--nui-badge-bg);
+  border: 1px solid color-mix(in srgb, var(--nui-badge-fg) 30%, transparent);
+  border-radius: var(--nui-radius-full);
+}
+
+.nui-badge[data-tone='accent'] {
+  --nui-badge-fg: var(--nui-color-accent);
+  --nui-badge-bg: var(--nui-color-accent-surface);
+}
+
+.nui-badge[data-tone='success'] {
+  --nui-badge-fg: var(--nui-color-success);
+  --nui-badge-bg: var(--nui-color-success-surface);
+}
+
+.nui-badge[data-tone='warning'] {
+  --nui-badge-fg: var(--nui-color-warning);
+  --nui-badge-bg: var(--nui-color-warning-surface);
+}
+
+.nui-badge[data-tone='danger'] {
+  --nui-badge-fg: var(--nui-color-danger);
+  --nui-badge-bg: var(--nui-color-danger-surface);
+}
+
+.nui-badge[data-tone='info'] {
+  --nui-badge-fg: var(--nui-color-info);
+  --nui-badge-bg: var(--nui-color-info-surface);
+}

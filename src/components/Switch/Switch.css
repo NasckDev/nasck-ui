@@ -1,0 +1,51 @@
+.nui-switch__row {
+  display: flex;
+  align-items: center;
+  gap: var(--nui-space-3);
+}
+
+.nui-switch__track {
+  position: relative;
+  flex-shrink: 0;
+  width: 2.75rem;
+  height: 1.5rem;
+  padding: 0;
+  background: var(--nui-color-border-strong);
+  border: none;
+  border-radius: var(--nui-radius-full);
+  cursor: pointer;
+  transition: background-color var(--nui-motion-duration-normal) var(--nui-motion-easing-standard);
+}
+
+.nui-switch__track[aria-checked='true'] {
+  background: var(--nui-color-accent);
+}
+
+.nui-switch__thumb {
+  position: absolute;
+  top: 3px;
+  left: 3px;
+  width: 1.125rem;
+  height: 1.125rem;
+  background: var(--nui-color-bg);
+  border-radius: var(--nui-radius-full);
+  box-shadow: var(--nui-shadow-sm);
+  transition: transform var(--nui-motion-duration-normal) var(--nui-motion-easing-emphasized);
+}
+
+.nui-switch__track[aria-checked='true'] .nui-switch__thumb {
+  transform: translateX(1.25rem);
+}
+
+.nui-switch__track:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.nui-switch__label {
+  cursor: pointer;
+}
+
+.nui-switch .nui-field__description {
+  padding-inline-start: calc(2.75rem + var(--nui-space-3));
+}

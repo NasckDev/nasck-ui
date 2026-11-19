@@ -1,0 +1,72 @@
+.nui-dialog__overlay {
+  position: fixed;
+  inset: 0;
+  z-index: var(--nui-z-index-dialog);
+  display: grid;
+  place-items: center;
+  padding: var(--nui-space-4);
+  background: var(--nui-color-overlay);
+  animation: nui-fade-in var(--nui-motion-duration-normal) var(--nui-motion-easing-standard);
+}
+
+.nui-dialog {
+  width: min(32rem, 100%);
+  max-height: calc(100vh - var(--nui-space-8));
+  overflow: auto;
+  padding: var(--nui-space-6);
+  font-family: var(--nui-font-family-sans);
+  color: var(--nui-color-text);
+  background: var(--nui-color-surface-raised);
+  border: 1px solid var(--nui-color-border);
+  border-radius: var(--nui-radius-lg);
+  box-shadow: var(--nui-shadow-lg);
+  animation: nui-dialog-in var(--nui-motion-duration-slow) var(--nui-motion-easing-emphasized);
+}
+
+.nui-dialog:focus-visible {
+  outline: 2px solid var(--nui-color-focus-ring);
+  outline-offset: 2px;
+}
+
+.nui-dialog__header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--nui-space-4);
+}
+
+.nui-dialog__title {
+  margin: 0;
+  font-size: var(--nui-font-size-xl);
+  font-weight: var(--nui-font-weight-semibold);
+  line-height: var(--nui-font-line-height-tight);
+}
+
+.nui-dialog__description {
+  margin: var(--nui-space-2) 0 0;
+  color: var(--nui-color-text-muted);
+}
+
+.nui-dialog__body {
+  margin-top: var(--nui-space-4);
+}
+
+.nui-dialog__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--nui-space-2);
+  margin-top: var(--nui-space-6);
+}
+
+@keyframes nui-fade-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes nui-dialog-in {
+  from {
+    opacity: 0;
+    transform: translateY(8px) scale(0.98);
+  }
+}

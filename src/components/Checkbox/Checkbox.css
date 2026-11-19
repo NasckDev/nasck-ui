@@ -1,0 +1,30 @@
+.nui-checkbox__row {
+  display: flex;
+  align-items: center;
+  gap: var(--nui-space-2);
+}
+
+.nui-checkbox__input {
+  width: 1.25rem;
+  height: 1.25rem;
+  margin: 0;
+  accent-color: var(--nui-color-accent);
+  border-radius: var(--nui-radius-sm);
+  cursor: pointer;
+}
+
+.nui-checkbox__input:disabled,
+.nui-checkbox__input:disabled + .nui-checkbox__label {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.nui-checkbox__label {
+  font-size: var(--nui-font-size-md);
+  cursor: pointer;
+}
+
+.nui-checkbox .nui-field__description,
+.nui-checkbox .nui-field__error {
+  padding-inline-start: calc(1.25rem + var(--nui-space-2));
+}
