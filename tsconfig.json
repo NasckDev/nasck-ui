@@ -17,7 +17,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "resolveJsonModule": true,
-    "types": ["vitest/globals", "@testing-library/jest-dom/vitest", "vite/client"],
+    "types": ["vitest/globals", "@testing-library/jest-dom/vitest", "vite/client", "node"],
     "noEmit": true
   },
   "include": ["src", "playground", "vite.config.ts"]
