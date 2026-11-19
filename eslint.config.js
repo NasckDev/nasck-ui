@@ -5,7 +5,7 @@ import globals from 'globals';
 import tseslint from 'typescript-eslint';
 
 export default tseslint.config(
-  { ignores: ['dist', 'storybook-static', 'coverage', 'node_modules', '!.storybook'] },
+  { ignores: ['dist', 'playground-dist', 'coverage', 'node_modules'] },
   js.configs.recommended,
   ...tseslint.configs.recommended,
   {
@@ -18,5 +18,10 @@ export default tseslint.config(
       '@typescript-eslint/no-explicit-any': 'error',
       'no-console': 'error',
     },
+  },
+  {
+    // Scrollable code blocks and tables must be keyboard-focusable (axe: scrollable-region-focusable).
+    files: ['playground/**/*.tsx'],
+    rules: { 'jsx-a11y/no-noninteractive-tabindex': 'off' },
   },
 );
