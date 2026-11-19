@@ -30,7 +30,7 @@ padrões em um único pacote, com contratos claros e testados.
 
 ## Componentes
 
-| Componente | Padrão / semântica | Teclado | axe (Vitest) |
+| Componente | Padrão / semântica | Teclado | Testes (teclado + axe) |
 | --- | --- | --- | --- |
 | Button | `button` nativo, `aria-busy` no loading | Enter, Espaço | ✅ |
 | IconButton | `aria-label` obrigatório | Enter, Espaço | ✅ |
@@ -38,14 +38,14 @@ padrões em um único pacote, com contratos claros e testados.
 | Checkbox | `input[type=checkbox]`, estado `indeterminate` | Espaço | ✅ |
 | Switch | APG Switch: `role="switch"` + `aria-checked` | Espaço, Enter | ✅ |
 | Select | `select` nativo com label, descrição e erro | nativo (setas, digitação) | ✅ |
-| Tabs | APG Tabs, ativação automática, roving tabindex | ←/→, Home/End | ✅ |
-| Dialog | `aria-modal`, focus trap, fundo `inert`, retorno de foco | Tab/Shift+Tab presos, Esc fecha | ✅ |
-| Toast | região `role="status"` (`aria-live="polite"`) | botão de dispensar | ✅ |
-| Tooltip | APG Tooltip, `aria-describedby` | aparece no foco, Esc fecha | ✅ |
-| Badge | texto (nunca só cor) | — | ✅ |
-| Card | `section` rotulada pelo título, nível de heading configurável | — | ✅ |
-| Skeleton | decorativo (`aria-hidden`), container usa `aria-busy` | — | ✅ |
-| EmptyState | heading + descrição + ação | — | ✅ |
+| Tabs | APG Tabs, ativação automática, roving tabindex | ←/→, Home/End | pendente |
+| Dialog | `aria-modal`, focus trap, fundo `inert`, retorno de foco | Tab/Shift+Tab presos, Esc fecha | pendente |
+| Toast | região `role="status"` (`aria-live="polite"`) | botão de dispensar | pendente |
+| Tooltip | APG Tooltip, `aria-describedby` | aparece no foco, Esc fecha | pendente |
+| Badge | texto (nunca só cor) | — | pendente |
+| Card | `section` rotulada pelo título, nível de heading configurável | — | pendente |
+| Skeleton | decorativo (`aria-hidden`), container usa `aria-busy` | — | pendente |
+| EmptyState | heading + descrição + ação | — | pendente |
 
 ## Instalação
 
@@ -82,7 +82,7 @@ npm run build            # ESM + .d.ts + CSS
 
 - TypeScript `strict` + `noUncheckedIndexedAccess`, sem `any` (regra de lint).
 - ESLint flat com `jsx-a11y` e `react-hooks`; `no-console` como erro.
-- Cada componente tem testes de renderização, teclado e axe sem violações.
+- Testes de renderização, teclado e axe escritos para 6 componentes (ver tabela); os demais estão pendentes.
 - Cobertura mínima de 80% configurada em `vite.config.ts`.
 - CI no GitHub Actions: tokens sincronizados, lint, typecheck, testes, build e build do Storybook.
 - Changelog e versionamento com Changesets.
