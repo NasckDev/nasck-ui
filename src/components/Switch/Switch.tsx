@@ -4,8 +4,10 @@ import { useControllableState } from '../../utils/useControllableState';
 import { FieldMessages, useFieldIds } from '../Field/Field';
 import './Switch.css';
 
-export interface SwitchProps
-  extends Omit<ComponentPropsWithoutRef<'button'>, 'onChange' | 'value' | 'defaultValue'> {
+export interface SwitchProps extends Omit<
+  ComponentPropsWithoutRef<'button'>,
+  'onChange' | 'value' | 'defaultValue'
+> {
   label: ReactNode;
   description?: ReactNode;
   checked?: boolean;

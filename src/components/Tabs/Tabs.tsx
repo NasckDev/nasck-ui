@@ -31,7 +31,9 @@ export const nextEnabledIndex = (
   current: number,
   key: NavigationKey,
 ): number => {
-  const enabled = items.map((item, index) => ({ item, index })).filter(({ item }) => !item.disabled);
+  const enabled = items
+    .map((item, index) => ({ item, index }))
+    .filter(({ item }) => !item.disabled);
   if (enabled.length === 0) return current;
   if (key === 'Home') return enabled[0]?.index ?? current;
   if (key === 'End') return enabled[enabled.length - 1]?.index ?? current;

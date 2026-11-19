@@ -69,7 +69,9 @@ describe('Checkbox', () => {
   });
 
   it('has no axe violations', async () => {
-    const { container } = render(<Checkbox label="Receber novidades" description="Uma vez por mês." />);
+    const { container } = render(
+      <Checkbox label="Receber novidades" description="Uma vez por mês." />,
+    );
     expect(await axeViolations(container)).toEqual([]);
   });
 });
@@ -139,7 +141,9 @@ describe('Select', () => {
   });
 
   it('has no axe violations', async () => {
-    const { container } = render(<Select label="País" options={options} description="Residência" />);
+    const { container } = render(
+      <Select label="País" options={options} description="Residência" />,
+    );
     expect(await axeViolations(container)).toEqual([]);
   });
 });
