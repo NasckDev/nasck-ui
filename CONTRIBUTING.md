@@ -1,27 +1,27 @@
 # Como contribuir
 
-Obrigado pelo interesse! O Nasck UI prioriza acessibilidade e contratos estáveis.
+O Nasck UI é a referência do contrato de wrappers dos projetos. Mudar o contrato é mudar o que os apps seguem.
 
 ## Fluxo
 
-1. Abra uma issue descrevendo o problema ou o componente proposto (padrão APG de referência,
-   comportamento de teclado e estados: default, hover, foco, disabled, loading, erro, vazio).
-2. Crie uma branch a partir de `main`.
-3. Implemente com testes primeiro: renderização, teclado e `axeViolations` sem violações.
-4. Adicione/atualize a story com todos os estados e a seção de teclado na descrição.
-5. Rode localmente:
+1. Altere `contract/contract.json` primeiro (nome do componente, props, eventos, seletor).
+2. Implemente o wrapper nos dois pacotes: `packages/react/src/ui/` e `packages/angular/src/ui/`.
+   Nada de importar `antd` ou `ng-zorro-antd` fora de `src/ui/` (o lint barra).
+3. Escreva a story com os estados padrão, desabilitado, carregando, erro e vazio, quando fizer sentido,
+   e controles nas props mais usadas.
+4. Rode o que o CI roda:
 
    ```bash
-   npm run lint && npm run typecheck && npm run test:coverage && npm run build
+   npm run lint && npm run typecheck && npm run test
+   npm run build-storybook && npm run build:portable
+   npm run test:e2e
    ```
 
-6. Registre a mudança com `npx changeset` (gera a entrada do CHANGELOG na release).
-7. Abra o PR; a CI precisa estar verde.
+5. Abra o PR; o CI precisa estar verde.
 
 ## Regras
 
-- Sem `any`, sem `console.log`, arquivos abaixo de ~400 linhas.
-- Tokens são editados em `src/tokens/tokens.ts`; depois rode `npm run build:tokens`.
-  Nunca edite `src/styles/tokens.css` à mão.
-- HTML nativo antes de ARIA. ARIA só quando o elemento nativo não expressa o padrão.
-- Commits em inglês, uma linha, com prefixo convencional (`feat:`, `fix:`, `docs:`...).
+- TypeScript estrito, sem `any`, sem `console.log`, arquivos abaixo de ~400 linhas.
+- Cores, espaçamentos, raios e fontes vêm do tema (`packages/tokens`). Nada de cor ou px fixo nos componentes.
+- Versões exatas no `package.json`, sem `^` nem `~`. Confira a licença (MIT ou Apache 2.0).
+- Documentação em pt-BR; código e commits em inglês, uma linha.

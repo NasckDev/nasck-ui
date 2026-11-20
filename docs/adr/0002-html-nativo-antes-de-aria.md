@@ -1,6 +1,6 @@
 # ADR 0002 — HTML nativo antes de ARIA
 
-- Status: aceito
+- Status: substituído pelo ADR 0004 (histórico do código legado, tag v0.2.0-legacy)
 - Data: 2026-11-19
 
 ## Contexto

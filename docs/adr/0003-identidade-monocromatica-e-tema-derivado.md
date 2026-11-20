@@ -1,6 +1,6 @@
 # ADR 0003 — Identidade monocromática e tema derivado do destaque
 
-- Status: aceito
+- Status: substituído pelo ADR 0004 (histórico do código legado, tag v0.2.0-legacy)
 - Data: 2026-11-19
 
 ## Contexto

@@ -1,0 +1,30 @@
+{
+  "name": "@nasckdev/nasck-ui-tokens",
+  "version": "1.0.0",
+  "description": "Tema central do Nasck UI: tokens do Ant Design, presets de paleta e verificacao de contraste AA, para React e Angular.",
+  "license": "MIT",
+  "type": "module",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "node scripts/generate-resolved.ts && tsc -p tsconfig.json",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --pool=threads --maxWorkers=1"
+  },
+  "devDependencies": {
+    "antd": "6.7.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "typescript": "6.0.3",
+    "vitest": "5.1.1"
+  }
+}
