@@ -143,6 +143,17 @@ describe('Menu focus', () => {
     expect(screen.getByRole('menuitem', { name: /Duplicar 1/ })).toHaveFocus();
   });
 
+  it('stays open and attached when the page scrolls or resizes after opening', async () => {
+    const user = userEvent.setup();
+    render(<Menu label="Ações" items={[{ id: 'a', label: 'Editar' }]} />);
+    await user.click(screen.getByRole('button', { name: 'Ações' }));
+    act(() => {
+      window.dispatchEvent(new Event('scroll'));
+      window.dispatchEvent(new Event('resize'));
+    });
+    expect(screen.getByRole('menu')).toBeInTheDocument();
+  });
+
   it('has no axe violations while open (menu is rendered in a body-level layer)', async () => {
     const user = userEvent.setup();
     render(<Menu label="Ações" items={[{ id: 'a', label: 'Editar' }]} />);

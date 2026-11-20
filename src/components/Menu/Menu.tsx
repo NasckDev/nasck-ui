@@ -114,8 +114,10 @@ export function Menu({
   const triggerRef = useRef<HTMLButtonElement>(null);
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const itemsRef = useRef(items);
+  const alignRef = useRef(align);
   useEffect(() => {
     itemsRef.current = items;
+    alignRef.current = align;
   });
   const pendingFocus = useRef<InitialFocus>('first');
   const typeahead = useRef({ text: '', timer: 0 });
@@ -149,14 +151,22 @@ export function Menu({
         itemRefs.current.some((node) => node?.contains(target));
       if (!inside) closeMenu(false);
     };
-    const handleDismiss = () => closeMenu(false);
+    // Scrolling or resizing keeps the menu attached to its trigger; it only closes when the
+    // trigger leaves the screen. (Closing on any scroll made menus vanish after layout shifts.)
+    const handleReposition = () => {
+      const trigger = triggerRef.current;
+      if (!trigger) return;
+      const rect = trigger.getBoundingClientRect();
+      if (rect.bottom < 0 || rect.top > window.innerHeight) closeMenu(false);
+      else setStyle(placeMenu(trigger, alignRef.current, itemsRef.current.length));
+    };
     document.addEventListener('pointerdown', handlePointerDown);
-    window.addEventListener('resize', handleDismiss);
-    window.addEventListener('scroll', handleDismiss, true);
+    window.addEventListener('resize', handleReposition);
+    window.addEventListener('scroll', handleReposition, true);
     return () => {
       document.removeEventListener('pointerdown', handlePointerDown);
-      window.removeEventListener('resize', handleDismiss);
-      window.removeEventListener('scroll', handleDismiss, true);
+      window.removeEventListener('resize', handleReposition);
+      window.removeEventListener('scroll', handleReposition, true);
     };
   }, [open, closeMenu]);
 
