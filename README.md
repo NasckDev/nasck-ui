@@ -69,27 +69,54 @@ Accordion, Menu Button e Combobox; HTML nativo (`button`, `input`, `select`, `ta
 
 ## Instalação
 
+Requisitos: **React 19** (a biblioteca usa `ref` como prop, então React 18 não é suportado) e, para instalar
+direto do GitHub, **Node 22.18 ou mais novo**: o script `prepare` compila a biblioteca (`dist`) na hora.
+
 ```bash
-npm install github:NasckDev/nasck-ui
+npm install github:NasckDev/nasck-ui react react-dom
+npm install @fontsource-variable/space-grotesk @fontsource-variable/dm-sans @fontsource/space-mono
 ```
 
 ```tsx
+// main.tsx: fontes e estilos, uma vez na entrada do app
+import '@fontsource-variable/space-grotesk/wght.css';
+import '@fontsource-variable/dm-sans/wght.css';
+import '@fontsource/space-mono/latin-400.css';
 import '@nasckdev/nasck-ui/styles.css';
-import { Button, TextField, ToastProvider } from '@nasckdev/nasck-ui';
+```
+
+```tsx
+// App.tsx
+import { Button, TextField, ToastProvider, useToast } from '@nasckdev/nasck-ui';
+
+function InviteForm() {
+  const { toast } = useToast();
+  return (
+    <form
+      onSubmit={(event) => {
+        event.preventDefault();
+        toast({ title: 'Convite enviado', tone: 'success' });
+      }}
+    >
+      <TextField label="E-mail" type="email" required description="Nunca compartilhamos." />
+      <Button type="submit">Enviar convite</Button>
+    </form>
+  );
+}
 
 export function App() {
   return (
     <ToastProvider>
-      <TextField label="E-mail" description="Nunca compartilhamos." />
-      <Button>Salvar</Button>
+      <InviteForm />
     </ToastProvider>
   );
 }
 ```
 
-As fontes não vêm no pacote: instale `@fontsource-variable/space-grotesk`,
-`@fontsource-variable/dm-sans` e `@fontsource/space-mono` (ou use as suas; os nomes estão em
-`tokens.font.family`).
+As fontes não vêm no pacote (assim você escolhe como carregá-las); os nomes estão em
+`tokens.font.family`. Tema escuro: `data-theme="dark"` no `<html>`; sem o atributo, segue o sistema.
+Os trechos de código das páginas de componente do site são exemplos completos (importações e dados
+incluídos) e são verificados contra os tipos reais da biblioteca nos testes.
 
 ## Arquitetura
 
