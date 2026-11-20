@@ -17,5 +17,5 @@ Tooltip (`aria-describedby`) e Toast (`role="status"`).
 ## Consequências
 
 - Select é nativo: menos customização visual da lista, mas suporte completo a teclado, leitores de
-  tela e pickers mobile. Um Combobox com filtro fica para uma versão futura.
+  tela e pickers mobile. Para listas longas existe o Combobox (padrão APG com aria-activedescendant).
 - O Dialog usa portal + `inert` nos irmãos em vez de `<dialog>` para ter controle testável do foco.

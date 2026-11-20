@@ -1,86 +1,71 @@
-# Nasck UI · Accessible Product Interface System
+# Nasck UI · design system React acessível
 
 [![CI](https://github.com/NasckDev/nasck-ui/actions/workflows/ci.yml/badge.svg)](https://github.com/NasckDev/nasck-ui/actions/workflows/ci.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 ![React 19](https://img.shields.io/badge/React-19-149eca)
 ![TypeScript strict](https://img.shields.io/badge/TypeScript-strict-3178c6)
+![WCAG 2.2 AA](https://img.shields.io/badge/WCAG-2.2%20AA-0a0a0a)
 
-Biblioteca de componentes React acessíveis, com design tokens exportáveis, documentação de teclado
-por componente e governança de qualidade (lint, tipos, testes com axe e CI).
+Biblioteca de **20 componentes React acessíveis**, tokens exportáveis, tema claro e escuro com contraste
+calculado e um **site de documentação** com playground de props, anatomia, tabelas de teclado e ARIA,
+construtor de tema e três telas completas montadas só com a biblioteca.
 
-**Demo ao vivo (playground):** <https://nasckdev.github.io/nasck-ui/> · também embutida no portfólio do
-autor, em `/projetos/nasck-ui/`.
+**Site e demo ao vivo:** <https://nasckdev.github.io/nasck-ui/> · também embutido no portfólio do autor,
+em `/projetos/nasck-ui/`.
 
-| Visão geral                                                         | Componente com estados e código                                  | Tokens com contraste (tema escuro)                                          |
-| ------------------------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| ![Visão geral do playground](./docs/prints/desktop-visao-geral.png) | ![Página do Button](./docs/prints/desktop-componente-button.png) | ![Página de tokens no tema escuro](./docs/prints/desktop-tokens-escuro.png) |
+![Visão geral do site](./docs/prints/desktop-visao-geral.png)
 
-| Celular: visão geral                                            | Celular: menu                                     | Celular: exemplo composto com erro                                        |
-| --------------------------------------------------------------- | ------------------------------------------------- | ------------------------------------------------------------------------- |
-| ![Visão geral no celular](./docs/prints/mobile-visao-geral.png) | ![Menu no celular](./docs/prints/mobile-menu.png) | ![Exemplo composto no celular](./docs/prints/mobile-exemplo-composto.png) |
+| Página de componente com playground                              | Construtor de tema (escuro)                                             |
+| ---------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| ![Página do Button](./docs/prints/desktop-componente-button.png) | ![Tokens no tema escuro](./docs/prints/desktop-tokens-escuro.png)       |
+| **Modelo: painel**                                               | **Modelo: configurações**                                               |
+| ![Modelo painel](./docs/prints/desktop-modelo-painel.png)        | ![Modelo configurações](./docs/prints/desktop-modelo-configuracoes.png) |
 
-## Problema
+| Celular: visão geral                                            | Celular: menu                                     | Celular: modelo painel (exemplo composto)                              |
+| --------------------------------------------------------------- | ------------------------------------------------- | ---------------------------------------------------------------------- |
+| ![Visão geral no celular](./docs/prints/mobile-visao-geral.png) | ![Menu no celular](./docs/prints/mobile-menu.png) | ![Modelo painel no celular](./docs/prints/mobile-exemplo-composto.png) |
 
-Padrões de interface recorrentes (botões, campos, modais, abas, notificações) eram reimplementados
-em cada projeto, com estados, foco e acessibilidade inconsistentes. O Nasck UI centraliza esses
-padrões em um único pacote, com contratos claros e testados.
+## O que resolve
 
-## Decisões
+Padrões de interface recorrentes (botões, campos, modais, abas, tabelas, menus) eram reimplementados
+em cada projeto, com estados, foco e acessibilidade inconsistentes. O Nasck UI centraliza esses padrões
+em um único pacote, com contratos claros, testes de teclado e axe em cada componente e documentação que
+mostra o código, o teclado e o ARIA de cada um.
 
-- **Tokens como fonte única** (`src/tokens/tokens.ts`): cor (tema claro e escuro), tipografia,
-  espaço, raio, sombra, movimento e z-index. O script `npm run build:tokens` gera
-  `src/styles/tokens.css` com custom properties `--nui-*`; a CI falha se o CSS estiver dessincronizado
-  (e há um teste que confere o mesmo).
-- **Temas**: `data-theme="light" | "dark"` no `<html>` ou, sem atributo, segue
-  `prefers-color-scheme`.
-- **Movimento**: todas as durações vêm de tokens e vão a `0ms` com `prefers-reduced-motion: reduce`.
-- **Foco visível**: anel duplo (`bg` + `focus-ring`) que funciona em fundo claro e escuro, e
-  `outline` em `forced-colors`.
-- **HTML nativo primeiro**: `button`, `input`, `select` e `label` reais; ARIA apenas onde o HTML não
-  basta (switch, tabs, dialog, tooltip).
-- **Sem dependências de runtime** além de React.
+## Identidade
+
+- **Tipografia:** Space Grotesk nos títulos, DM Sans no texto e Space Mono no código (auto-hospedadas
+  via `@fontsource`, sem requisição externa).
+- **Paleta:** monocromática de alto contraste (tinta `#0a0a0a`, papel `#ffffff`, cinzas neutros) com a
+  assinatura laranja `#FF5B14` usada com parcimônia em destaques, filetes e foco.
+- **Forma:** grade visível como elemento de design, cantos de 2 a 6 px e bordas de 1 px.
+- Logotipo SVG próprio, tema claro e escuro, `prefers-color-scheme` respeitado.
+
+## O site de documentação
+
+- **Home** com vitrine viva: botões, formulário, Combobox, Table, Tabs, Avatar, Toast, Menu, Accordion
+  e Pagination funcionando de verdade.
+- **Cada componente** tem playground com painel de props que gera o código (e botão de copiar),
+  variações e estados, anatomia interativa, tabela de teclado e ARIA, "Faça e não faça" e tabela de API.
+- **Tokens e construtor de tema:** escolha a cor de destaque, receba a escala de 11 tons (OKLCH), veja
+  a prévia nos dois temas, confira o contraste ao vivo e exporte o CSS.
+- **Modelos:** painel, configurações e login, montados só com a biblioteca (com validação, estados de
+  carregamento, confirmação de exclusão e toasts).
+- **Busca Ctrl+K**, navegação lateral com ícones (`lucide-react`) e drawer no celular.
+- Animações e transições discretas, todas desligadas em `prefers-reduced-motion`.
 
 ## Componentes
 
-| Componente | Padrão / semântica                                              | Teclado                         | Testes (teclado + axe) |
-| ---------- | --------------------------------------------------------------- | ------------------------------- | ---------------------- |
-| Button     | `button` nativo, `aria-busy` no loading                         | Enter, Espaço                   | ✅                     |
-| IconButton | `aria-label` obrigatório                                        | Enter, Espaço                   | ✅                     |
-| TextField  | `label` + `aria-describedby` (descrição, erro) + `aria-invalid` | nativo                          | ✅                     |
-| Checkbox   | `input[type=checkbox]`, estado `indeterminate`                  | Espaço                          | ✅                     |
-| Switch     | APG Switch: `role="switch"` + `aria-checked`                    | Espaço, Enter                   | ✅                     |
-| Select     | `select` nativo com label, descrição e erro                     | nativo (setas, digitação)       | ✅                     |
-| Tabs       | APG Tabs, ativação automática, roving tabindex                  | ←/→, Home/End                   | ✅                     |
-| Dialog     | `aria-modal`, focus trap, fundo `inert`, retorno de foco        | Tab/Shift+Tab presos, Esc fecha | ✅                     |
-| Toast      | região `role="status"` (`aria-live="polite"`)                   | botão de dispensar              | ✅                     |
-| Tooltip    | APG Tooltip, `aria-describedby`                                 | aparece no foco, Esc fecha      | ✅                     |
-| Badge      | texto (nunca só cor)                                            | —                               | ✅ (axe)               |
-| Card       | `section` rotulada pelo título, nível de heading configurável   | —                               | ✅ (axe)               |
-| Skeleton   | decorativo (`aria-hidden`), container usa `aria-busy`           | —                               | ✅ (axe)               |
-| EmptyState | heading + descrição + ação                                      | —                               | ✅ (axe)               |
+| Grupo                    | Componentes                                               |
+| ------------------------ | --------------------------------------------------------- |
+| Ações                    | Button, IconButton                                        |
+| Formulários              | TextField, Checkbox, Switch, Select, Combobox             |
+| Navegação e sobreposição | Tabs, Dialog, Toast, Tooltip, Accordion, Menu             |
+| Dados                    | Table (ordenável e responsiva), Pagination                |
+| Conteúdo e feedback      | Badge, Card, Skeleton, EmptyState, Avatar (e AvatarGroup) |
 
-## Playground (documentação viva)
-
-App Vite leve em `playground/`, que usa os componentes da própria biblioteca (em vez do Storybook, que
-é pesado demais para este fluxo). Cada componente tem estados (padrão, desabilitado, erro,
-carregando), exemplo de código copiável, tabela de teclado, notas de ARIA e tabela de props. Há também
-a página de tokens (paletas clara e escura com contraste WCAG calculado, tipografia, espaço, raios,
-sombras e movimento), troca de tema e um exemplo composto (tela de configurações).
-
-- Navegação por hash (`#/componentes/button`) e `base: './'`: funciona em qualquer subpath e recarrega
-  em qualquer rota. Verificado servindo a build em `/projetos/nasck-ui/`: sem 404 na rede, sem erro de
-  console e sem rolagem horizontal em 390px.
-- Sem fontes nem scripts de terceiros: tudo vem do próprio bundle.
-- Deploy: o workflow `pages.yml` publica `playground-dist/` no GitHub Pages a cada push na `main`.
-
-```bash
-npm run playground          # servidor de desenvolvimento
-npm run build:playground    # gera playground-dist/ (pasta estática portátil)
-npm run preview:playground  # serve a build local
-```
-
-Para embutir em outro site, copie o conteúdo de `playground-dist/` para a pasta desejada
-(por exemplo `projetos/nasck-ui/`); os caminhos dos assets são relativos.
+Todos têm teste de teclado e de axe. Padrões seguidos: APG para Switch, Tabs, Dialog, Tooltip,
+Accordion, Menu Button e Combobox; HTML nativo (`button`, `input`, `select`, `table`) onde existe.
 
 ## Instalação
 
@@ -91,7 +76,6 @@ npm install github:NasckDev/nasck-ui
 ```tsx
 import '@nasckdev/nasck-ui/styles.css';
 import { Button, TextField, ToastProvider } from '@nasckdev/nasck-ui';
-import { tokens } from '@nasckdev/nasck-ui/tokens';
 
 export function App() {
   return (
@@ -103,34 +87,61 @@ export function App() {
 }
 ```
 
+As fontes não vêm no pacote: instale `@fontsource-variable/space-grotesk`,
+`@fontsource-variable/dm-sans` e `@fontsource/space-mono` (ou use as suas; os nomes estão em
+`tokens.font.family`).
+
+## Arquitetura
+
+```mermaid
+flowchart LR
+  T[src/tokens/tokens.ts] -->|build:tokens| C[src/styles/tokens.css]
+  C --> L[Componentes src/components]
+  L --> D[dist: ESM + .d.ts + CSS]
+  L --> S[playground: site de documentação]
+  T --> S
+  S -->|build:portable| P[playground-dist: site estático, base ./ e rotas por hash]
+  S --> E[e2e: Playwright + axe]
+```
+
+Decisões em [`docs/adr/`](./docs/adr): tokens como fonte única, HTML nativo antes de ARIA e identidade
+monocromática com tema derivado do destaque.
+
 ## Desenvolvimento
 
 ```bash
 npm install
-npm run playground       # documentação interativa
+npm run playground       # site em modo de desenvolvimento
 npm run test:coverage    # Vitest + Testing Library + axe-core
 npm run lint && npm run typecheck
 npm run build            # ESM + .d.ts + CSS (+ dist/tokens.css)
+npm run build:portable   # site estático em playground-dist/
+npm run test:e2e         # Playwright + axe (usa a build de playground-dist)
 ```
 
-## Qualidade
+No Windows, para usar o Chrome instalado nos testes E2E: `PW_CHANNEL=chrome npm run test:e2e`. Em CI o
+Chromium do Playwright é instalado pelo workflow.
 
-- TypeScript `strict` + `noUncheckedIndexedAccess`, sem `any` (regra de lint).
-- ESLint flat com `jsx-a11y` e `react-hooks`; `no-console` como erro.
-- Testes de renderização, teclado e axe para os 14 componentes (ver tabela), mais testes de que o
-  `tokens.css` está em dia com os tokens e de que cada par de cor documentado cumpre o contraste WCAG
-  nos dois temas.
-- **Resultado real (última execução local):** 100 testes passando; cobertura de 99,5% de linhas e
-  instruções, 96,1% de ramos e 100% de funções. O limite de 80% em `vite.config.ts` foi mantido, sem
-  excluir arquivos para maquiar o número (só os testes, `src/test/` e os `index.ts` de reexportação
-  ficam fora da medição). O `color-contrast` do axe fica desligado nos testes porque o jsdom não tem
-  layout; o contraste é coberto pelos testes de tokens e pela página de Tokens do playground.
-- CI no GitHub Actions: tokens sincronizados, lint, typecheck, testes com cobertura, build da
-  biblioteca e build do playground.
-- Changelog e versionamento com Changesets.
+## Build portátil
 
-Decisões de arquitetura estão em [`docs/adr/`](./docs/adr). Para contribuir, veja
-[CONTRIBUTING.md](./CONTRIBUTING.md).
+`npm run build:portable` (alias de `build:playground`) gera `playground-dist/` com `base: './'`, nomes de
+arquivo com hash e rotas por hash (`#/componentes/button`). A pasta funciona servida em qualquer subpath
+(`/projetos/nasck-ui/`, `/Myportfolio/projetos/nasck-ui/`, GitHub Pages) e recarrega em qualquer rota.
+
+## Acessibilidade
+
+- Teclado em tudo, foco visível de duas camadas (3:1 ou mais) e `forced-colors` tratado.
+- Contraste AA nos dois temas, calculado: a página de Tokens mostra a razão de cada par e os testes
+  falham se algum ficar abaixo do mínimo. O construtor de tema deriva os papéis de destaque para cumprir
+  o contraste com qualquer cor escolhida.
+- Cor nunca é o único sinal (badges levam texto; ordenação leva texto para leitor de tela).
+- Alvos de toque de 44 px, funciona de 320 a 1440 px sem rolagem horizontal e com zoom.
+- axe sem violações nos testes de componente (jsdom) e nas páginas principais do site, nos dois temas
+  (E2E, navegador real, com `color-contrast`).
+
+## Qualidade e resultados
+
+**RESULTADOS**
 
 ## Licença
 
