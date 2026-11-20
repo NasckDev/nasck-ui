@@ -1,0 +1,122 @@
+[
+  {
+    "slug": "button",
+    "name": "Button",
+    "group": "Ações",
+    "summary": "Dispara uma ação. Quatro variantes, três tamanhos e estado de carregamento que mantém o foco no botão."
+  },
+  {
+    "slug": "icon-button",
+    "name": "IconButton",
+    "group": "Ações",
+    "summary": "Botão só com ícone. O nome acessível é obrigatório pela API (prop label)."
+  },
+  {
+    "slug": "text-field",
+    "name": "TextField",
+    "group": "Formulários",
+    "summary": "Campo de texto com rótulo sempre visível, descrição e mensagem de erro ligadas ao input."
+  },
+  {
+    "slug": "checkbox",
+    "name": "Checkbox",
+    "group": "Formulários",
+    "summary": "Caixa de seleção nativa com rótulo clicável, descrição, erro e estado misto."
+  },
+  {
+    "slug": "switch",
+    "name": "Switch",
+    "group": "Formulários",
+    "summary": "Liga/desliga com efeito imediato, seguindo o padrão Switch da WAI-ARIA APG."
+  },
+  {
+    "slug": "select",
+    "name": "Select",
+    "group": "Formulários",
+    "summary": "Seleção única sobre o <select> nativo: teclado, seletor móvel e leitor de tela de graça."
+  },
+  {
+    "slug": "tabs",
+    "name": "Tabs",
+    "group": "Navegação e sobreposição",
+    "summary": "Abas com ativação automática, seguindo o padrão Tabs da WAI-ARIA APG."
+  },
+  {
+    "slug": "dialog",
+    "name": "Dialog",
+    "group": "Navegação e sobreposição",
+    "summary": "Diálogo modal com foco preso, fundo inerte e retorno de foco ao gatilho."
+  },
+  {
+    "slug": "toast",
+    "name": "Toast",
+    "group": "Navegação e sobreposição",
+    "summary": "Notificações não bloqueantes, anunciadas por leitor de tela sem roubar o foco."
+  },
+  {
+    "slug": "tooltip",
+    "name": "Tooltip",
+    "group": "Navegação e sobreposição",
+    "summary": "Dica contextual no hover e no foco do teclado, ligada ao gatilho por aria-describedby."
+  },
+  {
+    "slug": "badge",
+    "name": "Badge",
+    "group": "Conteúdo e feedback",
+    "summary": "Rótulo estático de status. O significado está no texto, nunca só na cor."
+  },
+  {
+    "slug": "card",
+    "name": "Card",
+    "group": "Conteúdo e feedback",
+    "summary": "Contêiner de conteúdo. Com título, vira uma região rotulada pelo próprio heading."
+  },
+  {
+    "slug": "skeleton",
+    "name": "Skeleton",
+    "group": "Conteúdo e feedback",
+    "summary": "Marcador de carregamento. Decorativo: quem anuncia o carregamento é o contêiner."
+  },
+  {
+    "slug": "empty-state",
+    "name": "EmptyState",
+    "group": "Conteúdo e feedback",
+    "summary": "Explica por que não há conteúdo e qual é o próximo passo."
+  },
+  {
+    "slug": "avatar",
+    "name": "Avatar",
+    "group": "Conteúdo e feedback",
+    "summary": "Foto ou iniciais coloridas de uma pessoa, com grupo sobreposto e contador. A cor é estável por nome."
+  },
+  {
+    "slug": "table",
+    "name": "Table",
+    "group": "Dados",
+    "summary": "Tabela ordenável e responsiva: no celular cada linha vira um cartão com rótulo e valor."
+  },
+  {
+    "slug": "pagination",
+    "name": "Pagination",
+    "group": "Dados",
+    "summary": "Navegação entre páginas com janela de vizinhas, reticências e botões anterior e próxima."
+  },
+  {
+    "slug": "accordion",
+    "name": "Accordion",
+    "group": "Navegação e sobreposição",
+    "summary": "Seções recolhíveis com animação de altura. Um painel por vez ou vários."
+  },
+  {
+    "slug": "menu",
+    "name": "Menu",
+    "group": "Navegação e sobreposição",
+    "summary": "Menu suspenso de ações com ícones, itens desabilitados, separador e busca por digitação."
+  },
+  {
+    "slug": "combobox",
+    "name": "Combobox",
+    "group": "Formulários",
+    "summary": "Campo com sugestões filtradas por digitação, sem acento e sem diferenciar maiúsculas."
+  }
+]

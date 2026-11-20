@@ -1,10 +1,10 @@
-import { Menu as MenuIcon, Moon, Search, Sun, X } from 'lucide-react';
+import { Home, Menu as MenuIcon, Moon, Palette, Search, Sun, X } from 'lucide-react';
 import { Github } from './components/GithubIcon';
 import { Suspense, lazy, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { IconButton, Skeleton, ToastProvider } from '../../src';
 import { CommandPalette } from './components/CommandPalette';
 import { Logo } from './components/Logo';
-import { findDoc } from './docs';
+import { findMeta } from './docs';
 import {
   COMPONENT_PREFIX,
   TEMPLATES,
@@ -13,11 +13,10 @@ import {
   componentsByGroup,
   iconFor,
 } from './nav';
-import { ComponentPage } from './pages/ComponentPage';
+import { ComponentRoute } from './pages/ComponentRoute';
 import { HomePage } from './pages/HomePage';
 import { href, useHashRoute } from './router';
 import { useTheme } from './theme';
-import { Home, Palette } from 'lucide-react';
 
 // Heavy routes (theme builder and template screens) load on demand.
 const TokensPage = lazy(() =>
@@ -28,7 +27,12 @@ const TemplatePage = lazy(() =>
 );
 
 const DESKTOP_QUERY = '(min-width: 60rem)';
-const SEARCH_HINT = /Mac|iPhone|iPad/.test(navigator.platform) ? '⌘K' : 'Ctrl K';
+const isApple = (): boolean => {
+  const nav = navigator as Navigator & { userAgentData?: { platform?: string } };
+  return /Mac|iPhone|iPad/.test(nav.userAgentData?.platform ?? navigator.userAgent);
+};
+
+const SEARCH_HINT = isApple() ? '⌘K' : 'Ctrl K';
 
 function NavLink({
   to,
@@ -100,7 +104,7 @@ function Navigation({ route }: { route: string }) {
 
 function RouteFallback() {
   return (
-    <div aria-busy="true">
+    <div aria-busy="true" data-route-loading>
       <h1 className="pg-h1" id="page-title" tabIndex={-1}>
         Carregando…
       </h1>
@@ -130,8 +134,8 @@ function renderRoute(route: string) {
     if (TEMPLATES.some((template) => template.slug === slug)) return <TemplatePage slug={slug} />;
   }
   if (route.startsWith(COMPONENT_PREFIX)) {
-    const doc = findDoc(route.slice(COMPONENT_PREFIX.length));
-    if (doc) return <ComponentPage doc={doc} />;
+    const slug = route.slice(COMPONENT_PREFIX.length);
+    if (findMeta(slug)) return <ComponentRoute slug={slug} />;
   }
   return <NotFound />;
 }
@@ -142,7 +146,7 @@ function routeTitle(route: string): string {
     return `Modelo ${TEMPLATES.find((template) => template.slug === route.slice(TEMPLATE_PREFIX.length))?.label ?? ''}`.trim();
   }
   if (route.startsWith(COMPONENT_PREFIX)) {
-    return findDoc(route.slice(COMPONENT_PREFIX.length))?.name ?? 'Não encontrada';
+    return findMeta(route.slice(COMPONENT_PREFIX.length))?.name ?? 'Não encontrada';
   }
   return 'Não encontrada';
 }
@@ -161,6 +165,7 @@ export function App() {
 
   useEffect(() => {
     setMenuOpen(false);
+    setSearchOpen(false);
     window.scrollTo(0, 0);
     document.title =
       route === '/' ? 'Nasck UI · Design system acessível' : `${routeTitle(route)} · Nasck UI`;

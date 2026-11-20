@@ -23,7 +23,8 @@ test.describe('acessibilidade (axe) nas páginas principais', () => {
         await page.emulateMedia({ colorScheme: theme, reducedMotion: 'reduce' });
         await gotoRoute(page, route);
         await setTheme(page, theme);
-        await page.waitForTimeout(300);
+        await expect(page.locator('html')).toHaveAttribute('data-theme', theme);
+        await page.evaluate(() => document.fonts.ready);
         const violations = await runAxe(page);
         expect(
           violations.map(

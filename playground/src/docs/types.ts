@@ -5,8 +5,10 @@ export interface Demo {
   /** Short explanation shown under the title, e.g. how the state behaves. */
   note?: string;
   preview: ReactNode;
-  /** Copyable source for the example. */
+  /** Copyable source for the example (JSX, optionally preceded by hooks). */
   code: string;
+  /** Data the example needs (arrays, interfaces): printed above the component in the snippet. */
+  setup?: string;
 }
 
 export interface KeyRow {
@@ -33,6 +35,8 @@ export interface Playground {
   controls: readonly Control[];
   render: (values: ControlValues) => ReactNode;
   code: (values: ControlValues) => string;
+  /** Data the generated code refers to (e.g. an `options` array built from the panel). */
+  setup?: (values: ControlValues) => string;
 }
 
 export interface AnatomyPart {

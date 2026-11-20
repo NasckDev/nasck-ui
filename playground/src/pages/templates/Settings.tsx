@@ -15,6 +15,7 @@ import {
   TextField,
   useToast,
 } from '../../../../src';
+import '../../styles/templates-settings.css';
 
 const CITIES = [
   { value: 'sp', label: 'São Paulo' },

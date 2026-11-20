@@ -30,8 +30,7 @@ import {
   ChevronsLeftRight,
   type LucideIcon,
 } from 'lucide-react';
-import { componentDocs, GROUPS } from './docs';
-import type { ComponentDoc } from './docs/types';
+import { GROUPS, docMetas, type DocMeta } from './docs';
 
 export interface NavEntry {
   to: string;
@@ -118,7 +117,7 @@ export const buildEntries = (): NavEntry[] => [
     keywords: template.keywords,
     group: 'Modelos',
   })),
-  ...componentDocs.map((doc) => ({
+  ...docMetas.map((doc) => ({
     to: `${COMPONENT_PREFIX}${doc.slug}`,
     label: doc.name,
     icon: iconFor(doc.slug),
@@ -127,7 +126,5 @@ export const buildEntries = (): NavEntry[] => [
   })),
 ];
 
-export const componentsByGroup = (): ReadonlyArray<{
-  group: ComponentDoc['group'];
-  docs: ComponentDoc[];
-}> => GROUPS.map((group) => ({ group, docs: componentDocs.filter((doc) => doc.group === group) }));
+export const componentsByGroup = (): ReadonlyArray<{ group: DocMeta['group']; docs: DocMeta[] }> =>
+  GROUPS.map((group) => ({ group, docs: docMetas.filter((doc) => doc.group === group) }));

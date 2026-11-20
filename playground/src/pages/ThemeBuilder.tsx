@@ -1,6 +1,7 @@
-import { Check, Download, RotateCcw, X } from 'lucide-react';
+import { AlertTriangle, Check, CheckCircle2, Download, RotateCcw, Wand2, X } from 'lucide-react';
 import { useMemo, useState, type CSSProperties } from 'react';
 import { Avatar, Badge, Button, Combobox, Switch, Tabs, TextField } from '../../../src';
+import '../styles/builder.css';
 import { CodeBlock } from '../components/CodeBlock';
 import { contrastRatio } from '../contrast';
 import {
@@ -10,7 +11,8 @@ import {
   deriveAccentTheme,
   exportThemeCss,
   generateScale,
-  isHex,
+  adjustAccent,
+  normalizeHex,
   type AccentTheme,
   type ContrastCheck,
 } from '../lib/themeScale';
@@ -140,18 +142,24 @@ function ChecksTable({ checks, title }: { checks: ContrastCheck[]; title: string
 export function ThemeBuilder() {
   const [accent, setAccent] = useState(DEFAULT_ACCENT);
   const [draft, setDraft] = useState(DEFAULT_ACCENT);
-  const valid = isHex(draft);
+  const normalizedDraft = normalizeHex(draft);
+  const valid = normalizedDraft !== null;
 
   const model = useMemo(() => {
     const light = deriveAccentTheme(accent, 'light');
     const dark = deriveAccentTheme(accent, 'dark');
+    const lightChecks = checkAccentTheme(light, 'light');
+    const darkChecks = checkAccentTheme(dark, 'dark');
+    const failing = [...lightChecks, ...darkChecks].filter((check) => !check.passes);
     return {
+      failing,
+      total: lightChecks.length + darkChecks.length,
+      css: exportThemeCss(light, dark, failing.length),
       scale: generateScale(accent),
       light,
       dark,
-      lightChecks: checkAccentTheme(light, 'light'),
-      darkChecks: checkAccentTheme(dark, 'dark'),
-      css: exportThemeCss(light, dark),
+      lightChecks,
+      darkChecks,
     };
   }, [accent]);
 
@@ -196,11 +204,14 @@ export function ThemeBuilder() {
             value={draft}
             maxLength={7}
             spellCheck={false}
-            error={valid ? undefined : 'Use o formato #rrggbb.'}
+            description="Aceita #rgb e #rrggbb."
+            error={valid ? undefined : 'Use o formato #rrggbb ou #rgb, como #ff5b14.'}
             onChange={(event) => {
               setDraft(event.target.value);
-              if (isHex(event.target.value)) setAccent(event.target.value.toLowerCase());
+              const next = normalizeHex(event.target.value);
+              if (next) setAccent(next);
             }}
+            onBlur={() => normalizedDraft && setDraft(normalizedDraft)}
           />
           <Button
             variant="ghost"
@@ -229,6 +240,41 @@ export function ThemeBuilder() {
             </button>
           ))}
         </div>
+      </div>
+
+      <div
+        className="pg-tb-banner"
+        data-state={model.failing.length === 0 ? 'pass' : 'fail'}
+        role="status"
+      >
+        {model.failing.length === 0 ? (
+          <>
+            <CheckCircle2 size={20} aria-hidden="true" />
+            <p>
+              <strong>Todos os {model.total} pares passam no contraste AA</strong> nos dois temas,
+              incluindo hover e pressionado.
+            </p>
+          </>
+        ) : (
+          <>
+            <AlertTriangle size={20} aria-hidden="true" />
+            <p>
+              <strong>
+                {model.failing.length} de {model.total} pares reprovam o contraste AA.
+              </strong>{' '}
+              Exemplo: {model.failing[0]?.label.toLowerCase()} ({model.failing[0]?.ratio.toFixed(2)}
+              :1, mínimo {model.failing[0]?.required}:1).
+            </p>
+            <Button
+              size="sm"
+              variant="secondary"
+              startIcon={<Wand2 size={14} aria-hidden="true" />}
+              onClick={() => choose(adjustAccent(accent))}
+            >
+              Ajustar automaticamente
+            </Button>
+          </>
+        )}
       </div>
 
       <h3 className="pg-h3">Escala gerada</h3>
@@ -267,13 +313,21 @@ export function ThemeBuilder() {
         Importe depois do CSS da biblioteca. Só os papéis de destaque são sobrescritos.
       </p>
       <CodeBlock code={model.css} label="CSS do tema gerado" lang="css" />
-      <Button
-        variant="secondary"
-        startIcon={<Download size={16} aria-hidden="true" />}
-        onClick={download}
-      >
-        Baixar nasck-ui-tema.css
-      </Button>
+      <div className="pg-row">
+        <Button
+          variant="secondary"
+          startIcon={<Download size={16} aria-hidden="true" />}
+          onClick={download}
+        >
+          Baixar nasck-ui-tema.css
+        </Button>
+        {model.failing.length > 0 ? (
+          <p className="pg-tb-warning">
+            <AlertTriangle size={16} aria-hidden="true" /> {model.failing.length} par(es) reprovam o
+            contraste AA: ajuste a cor antes de usar este CSS.
+          </p>
+        ) : null}
+      </div>
     </section>
   );
 }

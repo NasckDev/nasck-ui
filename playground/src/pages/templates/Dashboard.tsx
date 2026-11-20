@@ -1,17 +1,4 @@
-import {
-  ArrowDownRight,
-  ArrowUpRight,
-  BarChart3,
-  Bell,
-  CircleDollarSign,
-  Download,
-  FileText,
-  LayoutDashboard,
-  Pencil,
-  Settings,
-  Trash2,
-  Users,
-} from 'lucide-react';
+import { ArrowDownRight, ArrowUpRight, Bell, Download, Pencil, Trash2 } from 'lucide-react';
 import { useMemo, useState } from 'react';
 import {
   Avatar,
@@ -24,223 +11,24 @@ import {
   Table,
   Tabs,
   useToast,
-  type BadgeTone,
   type TableColumn,
 } from '../../../../src';
 import { LogoMark } from '../../components/Logo';
-
-interface Invoice {
-  id: string;
-  client: string;
-  owner: string;
-  amount: number;
-  due: string;
-  status: 'Pago' | 'Pendente' | 'Atrasado';
-}
-
-const INVOICES: Invoice[] = [
-  {
-    id: 'F-2041',
-    client: 'Lumen Estúdio',
-    owner: 'Marina Duarte',
-    amount: 4820.5,
-    due: '2026-11-28',
-    status: 'Pago',
-  },
-  {
-    id: 'F-2042',
-    client: 'Cooperativa Alvorada',
-    owner: 'Caio Fernandes',
-    amount: 12900,
-    due: '2026-12-02',
-    status: 'Pendente',
-  },
-  {
-    id: 'F-2043',
-    client: 'Mercado Beira-Rio',
-    owner: 'Beatriz Nogueira',
-    amount: 780.9,
-    due: '2026-11-10',
-    status: 'Atrasado',
-  },
-  {
-    id: 'F-2044',
-    client: 'Clínica Vértice',
-    owner: 'Marina Duarte',
-    amount: 3150,
-    due: '2026-12-05',
-    status: 'Pago',
-  },
-  {
-    id: 'F-2045',
-    client: 'Oficina do Tato',
-    owner: 'Renan Albuquerque',
-    amount: 1290.75,
-    due: '2026-12-09',
-    status: 'Pendente',
-  },
-  {
-    id: 'F-2046',
-    client: 'Escola Girassol',
-    owner: 'Sofia Tavares',
-    amount: 8640,
-    due: '2026-11-15',
-    status: 'Atrasado',
-  },
-  {
-    id: 'F-2047',
-    client: 'Padaria Estrela',
-    owner: 'Caio Fernandes',
-    amount: 420,
-    due: '2026-12-12',
-    status: 'Pago',
-  },
-  {
-    id: 'F-2048',
-    client: 'Instituto Horizonte',
-    owner: 'Beatriz Nogueira',
-    amount: 15700,
-    due: '2026-12-18',
-    status: 'Pendente',
-  },
-  {
-    id: 'F-2049',
-    client: 'Grupo Vale Verde',
-    owner: 'Otávio Lins',
-    amount: 22300,
-    due: '2026-12-20',
-    status: 'Pago',
-  },
-  {
-    id: 'F-2050',
-    client: 'Ótica Panorama',
-    owner: 'Renan Albuquerque',
-    amount: 2260,
-    due: '2026-12-22',
-    status: 'Pendente',
-  },
-  {
-    id: 'F-2051',
-    client: 'Transportes Aurora',
-    owner: 'Marina Duarte',
-    amount: 9980,
-    due: '2026-12-27',
-    status: 'Pago',
-  },
-  {
-    id: 'F-2052',
-    client: 'Livraria Marginal',
-    owner: 'Sofia Tavares',
-    amount: 1180.4,
-    due: '2027-01-03',
-    status: 'Pendente',
-  },
-];
-
-const PAGE_SIZE = 5;
-const TONE: Record<Invoice['status'], BadgeTone> = {
-  Pago: 'success',
-  Pendente: 'warning',
-  Atrasado: 'danger',
-};
-const brl = (value: number): string =>
-  value.toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-const date = (iso: string): string =>
-  new Date(`${iso}T12:00:00`).toLocaleDateString('pt-BR', { day: '2-digit', month: 'short' });
-
-const TOP_COLLECTORS = [
-  { name: 'Marina Duarte', amount: 21400 },
-  { name: 'Caio Fernandes', amount: 15800 },
-  { name: 'Sofia Tavares', amount: 9200 },
-];
-
-const MONTHS = [
-  { label: 'jun', value: 48 },
-  { label: 'jul', value: 56 },
-  { label: 'ago', value: 52 },
-  { label: 'set', value: 67 },
-  { label: 'out', value: 72 },
-  { label: 'nov', value: 81 },
-];
-
-const MONTHS_12 = [
-  { label: 'dez', value: 38 },
-  { label: 'jan', value: 41 },
-  { label: 'fev', value: 39 },
-  { label: 'mar', value: 45 },
-  { label: 'abr', value: 44 },
-  { label: 'mai', value: 50 },
-  ...MONTHS,
-];
-
-const KPIS = [
-  {
-    label: 'Receita do mês',
-    value: 'R$ 81,2 mil',
-    delta: '+12,4%',
-    up: true,
-    icon: CircleDollarSign,
-  },
-  { label: 'Faturas em aberto', value: '14', delta: '-3', up: true, icon: FileText },
-  { label: 'Clientes ativos', value: '212', delta: '+9', up: true, icon: Users },
-  { label: 'Inadimplência', value: '3,8%', delta: '+0,6 p.p.', up: false, icon: BarChart3 },
-];
-
-const NAV = [
-  { label: 'Painel', icon: LayoutDashboard, current: true },
-  { label: 'Faturas', icon: FileText },
-  { label: 'Clientes', icon: Users },
-  { label: 'Configurações', icon: Settings },
-];
-
-function RevenueChart({ data }: { data: typeof MONTHS }) {
-  const max = Math.max(...data.map((month) => month.value));
-  const step = 288 / data.length;
-  const barWidth = Math.min(30, step * 0.62);
-  return (
-    <figure className="tpl-chart">
-      <figcaption className="tpl-chart__caption">Receita por mês (R$ mil)</figcaption>
-      <svg
-        viewBox="0 0 300 140"
-        className="tpl-chart__svg"
-        role="img"
-        aria-label={`Gráfico de barras da receita: ${data.map((m) => `${m.label} ${m.value} mil`).join(', ')}.`}
-      >
-        {[0, 1, 2, 3].map((line) => (
-          <line
-            key={line}
-            x1="0"
-            x2="300"
-            y1={20 + line * 30}
-            y2={20 + line * 30}
-            className="tpl-chart__grid"
-          />
-        ))}
-        {data.map((month, index) => {
-          const height = (month.value / max) * 100;
-          const last = index === data.length - 1;
-          const x = 6 + index * step + (step - barWidth) / 2;
-          return (
-            <g key={month.label}>
-              <rect
-                x={x}
-                y={120 - height}
-                width={barWidth}
-                height={height}
-                rx="2"
-                className={last ? 'tpl-chart__bar tpl-chart__bar--now' : 'tpl-chart__bar'}
-                style={{ animationDelay: `${index * 60}ms` }}
-              />
-              <text x={x + barWidth / 2} y="136" textAnchor="middle" className="tpl-chart__label">
-                {month.label}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-    </figure>
-  );
-}
+import '../../styles/templates-dashboard.css';
+import {
+  INVOICES,
+  KPIS,
+  MONTHS,
+  MONTHS_12,
+  NAV,
+  PAGE_SIZE,
+  TONE,
+  TOP_COLLECTORS,
+  brl,
+  date,
+  type Invoice,
+} from './dashboardData';
+import { RevenueChart } from './RevenueChart';
 
 export function DashboardTemplate() {
   const { toast } = useToast();
@@ -338,7 +126,7 @@ export function DashboardTemplate() {
   return (
     <div className="tpl tpl-dash">
       <div className="tpl-dash__rail">
-        <div className="tpl-dash__brand">
+        <div className="tpl-brand">
           <LogoMark size={24} /> <strong>Fluxo</strong>
         </div>
         <nav aria-label="Seções do aplicativo">
@@ -395,20 +183,21 @@ export function DashboardTemplate() {
         </header>
 
         <ul className="tpl-kpis">
-          {KPIS.map(({ label, value, delta, up, icon: Icon }) => (
+          {KPIS.map(({ label, value, change, trend, good, description, icon: Icon }) => (
             <li key={label}>
               <Card className="tpl-kpi">
                 <span className="tpl-kpi__label">
                   <Icon size={14} aria-hidden="true" /> {label}
                 </span>
                 <span className="tpl-kpi__value">{value}</span>
-                <Badge tone={up ? 'success' : 'danger'}>
-                  {up ? (
+                <Badge tone={good ? 'success' : 'danger'}>
+                  {trend === 'up' ? (
                     <ArrowUpRight size={12} aria-hidden="true" />
                   ) : (
                     <ArrowDownRight size={12} aria-hidden="true" />
                   )}
-                  {delta}
+                  {change}
+                  <span className="nui-visually-hidden">, {description}</span>
                 </Badge>
               </Card>
             </li>

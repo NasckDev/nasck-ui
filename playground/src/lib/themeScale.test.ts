@@ -1,6 +1,9 @@
 import { contrastRatio } from '../contrast';
 import {
   SCALE_STEPS,
+  adjustAccent,
+  failingCount,
+  normalizeHex,
   checkAccentTheme,
   deriveAccentTheme,
   exportThemeCss,
@@ -76,7 +79,64 @@ describe('deriveAccentTheme', () => {
   });
 });
 
+describe('hex input', () => {
+  it('expands three-digit colors and tolerates a missing hash and spaces', () => {
+    expect(normalizeHex('#fff')).toBe('#ffffff');
+    expect(normalizeHex('F60')).toBe('#ff6600');
+    expect(normalizeHex('  #FF5B14 ')).toBe('#ff5b14');
+    expect(normalizeHex('#ff5b1')).toBeNull();
+    expect(normalizeHex('zzz')).toBeNull();
+  });
+});
+
+describe('hover and pressed states', () => {
+  BRANDS.forEach((brand) => {
+    (['light', 'dark'] as const).forEach((mode) => {
+      it(brand + ' keeps text readable on hover and pressed in the ' + mode + ' theme', () => {
+        const theme = deriveAccentTheme(brand, mode);
+        expect(contrastRatio(theme.textOnAccent, theme.accentHover)).toBeGreaterThanOrEqual(4.5);
+        expect(contrastRatio(theme.textOnAccent, theme.accentActive)).toBeGreaterThanOrEqual(4.5);
+      });
+    });
+  });
+
+  it('covers the cases that used to fail (blue hover, pink hover, teal pressed)', () => {
+    ['#2563eb', '#e11d48', '#14b8a6'].forEach((brand) => {
+      const theme = deriveAccentTheme(brand, 'light');
+      expect(contrastRatio(theme.textOnAccent, theme.accentHover)).toBeGreaterThanOrEqual(4.5);
+      expect(contrastRatio(theme.textOnAccent, theme.accentActive)).toBeGreaterThanOrEqual(4.5);
+    });
+  });
+});
+
+describe('adjustAccent', () => {
+  it('leaves a passing color alone', () => {
+    expect(failingCount('#ff5b14')).toBe(0);
+    expect(adjustAccent('#ff5b14')).toBe('#ff5b14');
+  });
+
+  it('rescues colors that fail (yellow is 1.27:1 on white) and keeps the hue', () => {
+    expect(failingCount('#ffe600')).toBeGreaterThan(0);
+    const fixed = adjustAccent('#ffe600');
+    expect(failingCount(fixed)).toBe(0);
+    expect(Math.abs(hexToOklch(fixed).h - hexToOklch('#ffe600').h)).toBeLessThan(8);
+  });
+
+  it('every test brand passes in both themes after adjustment', () => {
+    BRANDS.forEach((brand) => expect(failingCount(adjustAccent(brand))).toBe(0));
+  });
+});
+
 describe('exportThemeCss', () => {
+  it('warns in the header when pairs fail', () => {
+    const css = exportThemeCss(
+      deriveAccentTheme('#ffe600', 'light'),
+      deriveAccentTheme('#ffe600', 'dark'),
+      3,
+    );
+    expect(css).toContain('ATENÇÃO: 3 par');
+  });
+
   it('emits both themes and the system dark media query', () => {
     const css = exportThemeCss(
       deriveAccentTheme('#ff5b14', 'light'),

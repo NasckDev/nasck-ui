@@ -14,6 +14,8 @@ interface JsxOptions {
   fixed?: readonly string[];
   /** Controls to leave out of the generated code. */
   skip?: readonly string[];
+  /** Controls always written, even at their default value (required props such as `label`). */
+  always?: readonly string[];
 }
 
 /** Builds JSX for `tag`, listing only the props that differ from their default value. */
@@ -23,12 +25,15 @@ export const generateJsx = (
   values: ControlValues,
   options: JsxOptions = {},
 ): string => {
-  const { childrenKey, fixed = [], skip = [] } = options;
+  const { childrenKey, fixed = [], skip = [], always = [] } = options;
   const props = [
     ...fixed,
     ...controls
       .filter((control) => control.name !== childrenKey && !skip.includes(control.name))
-      .filter((control) => values[control.name] !== control.default)
+      .filter((control) => values[control.name] !== '')
+      .filter(
+        (control) => always.includes(control.name) || values[control.name] !== control.default,
+      )
       .map((control) => formatProp(control.name, values[control.name] ?? control.default))
       .filter(Boolean),
   ];

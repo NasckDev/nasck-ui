@@ -26,16 +26,14 @@ export const useTheme = (): [Theme, () => void] => {
   }, [theme]);
 
   const toggle = useCallback(() => {
-    setTheme((current) => {
-      const next: Theme = current === 'light' ? 'dark' : 'light';
-      try {
-        window.localStorage.setItem(STORAGE_KEY, next);
-      } catch {
-        // Persistence is optional.
-      }
-      return next;
-    });
-  }, []);
+    const next: Theme = theme === 'light' ? 'dark' : 'light';
+    try {
+      window.localStorage.setItem(STORAGE_KEY, next);
+    } catch {
+      // Persistence is optional.
+    }
+    setTheme(next);
+  }, [theme]);
 
   return [theme, toggle];
 };

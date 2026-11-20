@@ -45,6 +45,7 @@ export const watchProblems = (page: Page): string[] => {
 export const gotoRoute = async (page: Page, hash: string): Promise<void> => {
   await page.goto(`./#${hash}`, { waitUntil: 'domcontentloaded' });
   await page.waitForSelector('#page-title');
+  await page.waitForSelector('[data-route-loading]', { state: 'detached' });
 };
 
 export const setTheme = async (page: Page, theme: 'light' | 'dark'): Promise<void> => {

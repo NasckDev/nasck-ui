@@ -7,8 +7,10 @@ import '@fontsource/space-mono/latin-700.css';
 import '../../src/styles/tokens.css';
 import '../../src/styles/base.css';
 import { App } from './App';
-import './site.css';
-import './templates.css';
+import './styles/site.css';
+import './styles/shell.css';
+import './styles/palette.css';
+import './styles/code.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Root element #root not found.');

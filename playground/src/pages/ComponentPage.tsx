@@ -1,10 +1,13 @@
 import { Check, X } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState, type ReactNode } from 'react';
-import { Badge, Select, Switch, TextField } from '../../../src';
+import { Badge, Select, Skeleton, Switch, TextField } from '../../../src';
 import { CodeBlock } from '../components/CodeBlock';
+import { buildSnippet } from '../lib/snippet';
 import { defaultValues } from '../lib/codegen';
+import type { DocMeta } from '../docs';
 import type { ComponentDoc, Control, ControlValues, Tip } from '../docs/types';
 import { iconFor } from '../nav';
+import '../styles/component.css';
 
 const SECTIONS = [
   { id: 'playground', label: 'Playground' },
@@ -87,7 +90,10 @@ function PlaygroundSection({ doc }: { doc: ComponentDoc }) {
         </button>
       </form>
       <div className="pg-playground__code">
-        <CodeBlock code={playground.code(values)} label={`${doc.name}, gerado pelo playground`} />
+        <CodeBlock
+          code={buildSnippet({ code: playground.code(values), setup: playground.setup?.(values) })}
+          label={`${doc.name}, gerado pelo playground`}
+        />
       </div>
     </div>
   );
@@ -180,47 +186,70 @@ function Section({ id, title, children }: { id: string; title: string; children:
   );
 }
 
-export function ComponentPage({ doc }: { doc: ComponentDoc }) {
-  const Icon = iconFor(doc.slug);
-  const available = SECTIONS.filter((section) => {
-    if (section.id === 'playground') return Boolean(doc.playground);
-    if (section.id === 'anatomia') return Boolean(doc.anatomy?.length);
-    if (section.id === 'praticas') return Boolean(doc.dos?.length || doc.donts?.length);
-    return true;
-  });
+export function ComponentPage({ meta, doc }: { meta: DocMeta; doc: ComponentDoc | undefined }) {
+  const Icon = iconFor(meta.slug);
+  const available = doc
+    ? SECTIONS.filter((section) => {
+        if (section.id === 'playground') return Boolean(doc.playground);
+        if (section.id === 'anatomia') return Boolean(doc.anatomy?.length);
+        if (section.id === 'praticas') return Boolean(doc.dos?.length || doc.donts?.length);
+        return true;
+      })
+    : [];
 
+  // The heading is the same element while the docs chunk loads, so focus set on navigation stays.
   return (
     <>
       <header className="pg-page-head">
         <p className="pg-eyebrow">
-          <Icon size={14} aria-hidden="true" /> {doc.group}
+          <Icon size={14} aria-hidden="true" /> {meta.group}
         </p>
         <h1 className="pg-h1" tabIndex={-1} id="page-title">
-          {doc.name}
+          {meta.name}
         </h1>
-        <p className="pg-lead">{doc.summary}</p>
-        <p className="pg-semantics">
-          <Badge tone="accent">Semântica</Badge> <span>{doc.semantics}</span>
-        </p>
-        <nav aria-label="Nesta página" className="pg-toc">
-          {available.map((section) => (
-            <a
-              key={section.id}
-              href={`#/componentes/${doc.slug}`}
-              onClick={(event) => {
-                event.preventDefault();
-                document
-                  .getElementById(section.id)
-                  ?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                document.getElementById(`sec-${section.id}`)?.focus({ preventScroll: true });
-              }}
-            >
-              {section.label}
-            </a>
-          ))}
-        </nav>
+        <p className="pg-lead">{meta.summary}</p>
+        {doc ? (
+          <p className="pg-semantics">
+            <Badge tone="accent">Semântica</Badge> <span>{doc.semantics}</span>
+          </p>
+        ) : null}
+        {doc ? (
+          <nav aria-label="Nesta página" className="pg-toc">
+            {available.map((section) => (
+              <a
+                key={section.id}
+                href={`#/componentes/${meta.slug}`}
+                onClick={(event) => {
+                  event.preventDefault();
+                  document.getElementById(section.id)?.scrollIntoView({
+                    behavior: window.matchMedia('(prefers-reduced-motion: reduce)').matches
+                      ? 'auto'
+                      : 'smooth',
+                    block: 'start',
+                  });
+                  document.getElementById(`sec-${section.id}`)?.focus({ preventScroll: true });
+                }}
+              >
+                {section.label}
+              </a>
+            ))}
+          </nav>
+        ) : null}
       </header>
+      {doc ? (
+        <ComponentBody doc={doc} />
+      ) : (
+        <div data-route-loading aria-busy="true">
+          <Skeleton lines={4} />
+        </div>
+      )}
+    </>
+  );
+}
 
+function ComponentBody({ doc }: { doc: ComponentDoc }) {
+  return (
+    <>
       {doc.playground ? (
         <Section id="playground" title="Playground">
           <p className="pg-note">
@@ -236,7 +265,10 @@ export function ComponentPage({ doc }: { doc: ComponentDoc }) {
             <h3 className="pg-h3">{demo.title}</h3>
             {demo.note ? <p className="pg-note">{demo.note}</p> : null}
             <div className="pg-preview">{demo.preview}</div>
-            <CodeBlock code={demo.code} label={`${doc.name}, ${demo.title}`} />
+            <CodeBlock
+              code={buildSnippet({ code: demo.code, setup: demo.setup })}
+              label={`${doc.name}, ${demo.title}`}
+            />
           </article>
         ))}
       </Section>

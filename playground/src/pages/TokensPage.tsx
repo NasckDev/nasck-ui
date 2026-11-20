@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Badge, Button, Select, tokens, type ColorRole, type ThemeName } from '../../../src';
 import { contrastLevel, contrastRatio, type ContrastLevel } from '../contrast';
+import '../styles/tokens.css';
 import { ThemeBuilder } from './ThemeBuilder';
 import { COLOR_GROUPS, CONTRAST_PAIRS } from './tokensData';
 

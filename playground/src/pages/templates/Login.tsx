@@ -2,6 +2,7 @@ import { Quote, ShieldCheck } from 'lucide-react';
 import { useState, type FormEvent } from 'react';
 import { Button, Checkbox, TextField, useToast } from '../../../../src';
 import { LogoMark } from '../../components/Logo';
+import '../../styles/templates-login.css';
 
 const EMAIL_PATTERN = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 const MIN_PASSWORD = 8;
@@ -48,7 +49,7 @@ export function LoginTemplate() {
     <div className="tpl tpl-login">
       <div className="tpl-login__brand">
         <div className="tpl-login__grid" aria-hidden="true" />
-        <div className="tpl-dash__brand">
+        <div className="tpl-brand">
           <LogoMark size={28} /> <strong>Fluxo</strong>
         </div>
         <figure className="tpl-login__quote">
@@ -113,7 +114,7 @@ export function LoginTemplate() {
             startIcon={<ShieldCheck size={18} aria-hidden="true" />}
             onClick={() => toast({ title: 'SSO indisponível na demonstração', tone: 'warning' })}
           >
-            Entrar com SSO da empresa
+            Entrar com SSO
           </Button>
           <p className="tpl-sub tpl-login__legal">
             Ao entrar, você concorda com os termos de uso e a política de privacidade.

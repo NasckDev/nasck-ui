@@ -12,10 +12,12 @@ export const copyText = async (text: string): Promise<boolean> => {
     area.setAttribute('readonly', '');
     area.style.position = 'fixed';
     area.style.opacity = '0';
+    const previous = document.activeElement as HTMLElement | null;
     document.body.appendChild(area);
     area.select();
     const ok = document.execCommand('copy');
     area.remove();
+    previous?.focus();
     return ok;
   }
 };

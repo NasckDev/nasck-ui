@@ -1,7 +1,7 @@
 import { CornerDownLeft } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState, type KeyboardEvent } from 'react';
 import { createPortal } from 'react-dom';
-import { normalizeText } from '../../../src/components/Combobox/Combobox';
+import { normalizeText } from '../../../src';
 import type { NavEntry } from '../nav';
 
 interface CommandPaletteProps {
@@ -41,6 +41,12 @@ export function CommandPalette({ open, entries, onClose, onNavigate }: CommandPa
   const inputRef = useRef<HTMLInputElement>(null);
   const listId = useId();
   const results = useMemo(() => searchEntries(entries, query), [entries, query]);
+  const listRef = useRef<HTMLUListElement>(null);
+
+  // Keep the highlighted result visible when the list scrolls (small screens, many results).
+  useEffect(() => {
+    listRef.current?.children[active]?.scrollIntoView({ block: 'nearest' });
+  }, [active, results]);
 
   useEffect(() => {
     if (!open) return undefined;
@@ -111,7 +117,13 @@ export function CommandPalette({ open, entries, onClose, onNavigate }: CommandPa
           }}
           onKeyDown={handleKeyDown}
         />
-        <ul id={listId} role="listbox" aria-label="Resultados" className="pg-palette__list">
+        <ul
+          ref={listRef}
+          id={listId}
+          role="listbox"
+          aria-label="Resultados"
+          className="pg-palette__list"
+        >
           {results.map((entry, index) => {
             const Icon = entry.icon;
             return (

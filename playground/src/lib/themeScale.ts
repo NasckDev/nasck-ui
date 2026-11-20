@@ -18,6 +18,20 @@ const linearToSrgb = (value: number): number =>
 
 export const isHex = (value: string): boolean => /^#[0-9a-f]{6}$/i.test(value);
 
+/** Accepts "#rgb", "#rrggbb" and the same without "#"; returns "#rrggbb" in lowercase, or null. */
+export const normalizeHex = (value: string): string | null => {
+  const raw = value.trim().replace(/^#/, '').toLowerCase();
+  if (/^[0-9a-f]{3}$/.test(raw))
+    return (
+      '#' +
+      raw
+        .split('')
+        .map((char) => char + char)
+        .join('')
+    );
+  return /^[0-9a-f]{6}$/.test(raw) ? '#' + raw : null;
+};
+
 const hexToRgb = (hex: string): [number, number, number] => {
   const raw = hex.replace('#', '');
   return [0, 2, 4].map((start) => parseInt(raw.slice(start, start + 2), 16) / 255) as [
@@ -171,6 +185,26 @@ const shift = (hex: string, delta: number): string => {
   return oklchToHex({ ...color, l: clamp01(color.l + delta) });
 };
 
+const MIN_TEXT_CONTRAST = 4.5;
+
+/**
+ * Hover and pressed backgrounds move away from the text color (lighter under dark text, darker
+ * under light text), so the text on them never has less contrast than on the base color.
+ */
+const deriveStates = (base: string, text: string): { hover: string; active: string } => {
+  const direction = text === '#0a0a0a' ? 1 : -1;
+  const state = (start: number): string => {
+    let delta = start;
+    let color = shift(base, direction * delta);
+    while (contrastRatio(text, color) < MIN_TEXT_CONTRAST && delta < 0.7) {
+      delta += 0.02;
+      color = shift(base, direction * delta);
+    }
+    return color;
+  };
+  return { hover: state(0.05), active: state(0.09) };
+};
+
 /** Derives the accent roles of a theme from one chosen color, honoring WCAG contrast limits. */
 export const deriveAccentTheme = (base: string, mode: 'light' | 'dark'): AccentTheme => {
   const scale = generateScale(base);
@@ -179,6 +213,7 @@ export const deriveAccentTheme = (base: string, mode: 'light' | 'dark'): AccentT
 
   const textOnAccent =
     contrastRatio('#0a0a0a', base) >= contrastRatio('#ffffff', base) ? '#0a0a0a' : '#ffffff';
+  const hoverActive = deriveStates(base, textOnAccent);
 
   if (mode === 'light') {
     const surface = scale[50];
@@ -186,8 +221,8 @@ export const deriveAccentTheme = (base: string, mode: 'light' | 'dark'): AccentT
     const focusRing = firstPassing(steps.slice(4), [backdrop.bg, backdrop.surface], 3, scale[900]);
     return {
       accent: base.toLowerCase(),
-      accentHover: shift(base, 0.06),
-      accentActive: shift(base, -0.06),
+      accentHover: hoverActive.hover,
+      accentActive: hoverActive.active,
       accentText,
       accentSurface: surface,
       textOnAccent,
@@ -211,8 +246,8 @@ export const deriveAccentTheme = (base: string, mode: 'light' | 'dark'): AccentT
   );
   return {
     accent: base.toLowerCase(),
-    accentHover: shift(base, 0.06),
-    accentActive: shift(base, -0.06),
+    accentHover: hoverActive.hover,
+    accentActive: hoverActive.active,
     accentText,
     accentSurface: surface,
     textOnAccent,
@@ -237,6 +272,18 @@ export const checkAccentTheme = (theme: AccentTheme, mode: 'light' | 'dark'): Co
       label: 'Texto sobre o destaque',
       foreground: theme.textOnAccent,
       background: theme.accent,
+      required: 4.5,
+    },
+    {
+      label: 'Texto sobre o destaque (hover)',
+      foreground: theme.textOnAccent,
+      background: theme.accentHover,
+      required: 4.5,
+    },
+    {
+      label: 'Texto sobre o destaque (pressionado)',
+      foreground: theme.textOnAccent,
+      background: theme.accentActive,
       required: 4.5,
     },
     {
@@ -283,9 +330,13 @@ const declarations = (theme: AccentTheme): string =>
   ACCENT_ROLES.map((role) => `  --nui-color-${toKebab(role)}: ${theme[role]};`).join('\n');
 
 /** CSS that overrides the accent roles in both themes (same selectors the library uses). */
-export const exportThemeCss = (light: AccentTheme, dark: AccentTheme): string =>
+export const exportThemeCss = (light: AccentTheme, dark: AccentTheme, failing = 0): string =>
   [
-    '/* Tema Nasck UI: gerado pelo construtor de tema */',
+    failing > 0
+      ? '/* ATENÇÃO: ' +
+        failing +
+        ' par(es) de cor reprovam o contraste AA. Ajuste a cor antes de usar. */'
+      : '/* Tema Nasck UI: gerado pelo construtor de tema; todos os pares passam no contraste AA. */',
     `:root,\n[data-theme='light'] {\n${declarations(light)}\n}`,
     `[data-theme='dark'] {\n${declarations(dark)}\n}`,
     `@media (prefers-color-scheme: dark) {\n  :root:not([data-theme='light']) {\n${declarations(
@@ -296,3 +347,29 @@ export const exportThemeCss = (light: AccentTheme, dark: AccentTheme): string =>
       .join('\n')}\n  }\n}`,
     '',
   ].join('\n\n');
+
+/** Every contrast check of an accent color, both themes together. */
+export const allChecks = (base: string): ContrastCheck[] => [
+  ...checkAccentTheme(deriveAccentTheme(base, 'light'), 'light'),
+  ...checkAccentTheme(deriveAccentTheme(base, 'dark'), 'dark'),
+];
+
+export const failingCount = (base: string): number =>
+  allChecks(base).filter((check) => !check.passes).length;
+
+/**
+ * Nearest color (same hue and chroma, only lightness changes) that passes every check in both
+ * themes. Returns the input when it already passes or when nothing nearby does.
+ */
+export const adjustAccent = (base: string): string => {
+  if (failingCount(base) === 0) return base;
+  const origin = hexToOklch(base);
+  for (let step = 1; step <= 60; step += 1) {
+    const delta = step * 0.01;
+    for (const sign of [-1, 1]) {
+      const candidate = oklchToHex({ ...origin, l: clamp01(origin.l + sign * delta) });
+      if (failingCount(candidate) === 0) return candidate;
+    }
+  }
+  return base;
+};

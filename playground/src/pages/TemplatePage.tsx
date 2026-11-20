@@ -2,6 +2,8 @@ import { Moon, Sun } from 'lucide-react';
 import { useState } from 'react';
 import { IconButton } from '../../../src';
 import { TEMPLATES } from '../nav';
+import '../styles/frame.css';
+import '../styles/templates-base.css';
 import { DashboardTemplate } from './templates/Dashboard';
 import { LoginTemplate } from './templates/Login';
 import { SettingsTemplate } from './templates/Settings';

@@ -1,4 +1,4 @@
-import { ArrowRight, Check, Copy, Palette, ShieldCheck, Sparkles, SunMoon } from 'lucide-react';
+import { ArrowRight, Palette } from 'lucide-react';
 import { useState } from 'react';
 import {
   Accordion,
@@ -7,236 +7,23 @@ import {
   Button,
   Checkbox,
   Combobox,
-  Menu,
-  Card,
   Pagination,
-  Select,
   Switch,
   Table,
   Tabs,
   TextField,
-  useToast,
-  type TableColumn,
 } from '../../../src';
-import { copyText } from '../components/CodeBlock';
+
 import { Github } from '../components/GithubIcon';
-import { componentDocs } from '../docs';
+import { docMetas } from '../docs';
 import { COMPONENT_PREFIX, TEMPLATES, TEMPLATE_PREFIX, iconFor } from '../nav';
 import { href } from '../router';
+import '../styles/hero.css';
+import '../styles/home.css';
 
-const INSTALL = 'npm install github:NasckDev/nasck-ui';
-
-const PILLARS = [
-  {
-    icon: ShieldCheck,
-    title: 'Acessível por padrão',
-    text: 'HTML nativo primeiro, padrões APG, foco visível e teste de teclado e axe em cada componente.',
-  },
-  {
-    icon: Palette,
-    title: 'Tokens como fonte única',
-    text: 'Cor, tipografia, espaço e movimento viram variáveis CSS geradas de um objeto tipado.',
-  },
-  {
-    icon: SunMoon,
-    title: 'Tema claro e escuro',
-    text: 'Dois temas calibrados, com contraste AA calculado e um construtor para trocar o destaque.',
-  },
-  {
-    icon: Sparkles,
-    title: 'Leve e sem surpresas',
-    text: 'Só depende de React. Movimento respeita prefers-reduced-motion e nada vem de CDN.',
-  },
-];
-
-interface Deal {
-  id: string;
-  client: string;
-  value: number;
-  stage: string;
-}
-
-const DEALS: Deal[] = [
-  { id: '1', client: 'Lumen Estúdio', value: 18400, stage: 'Proposta' },
-  { id: '2', client: 'Cooperativa Alvorada', value: 52000, stage: 'Negociação' },
-  { id: '3', client: 'Clínica Vértice', value: 9700, stage: 'Fechado' },
-];
-
-const dealColumns: TableColumn<Deal>[] = [
-  {
-    id: 'client',
-    header: 'Conta',
-    cell: (row) => row.client,
-    sortable: true,
-    sortValue: (row) => row.client,
-    isRowHeader: true,
-  },
-  {
-    id: 'value',
-    header: 'Valor',
-    cell: (row) =>
-      row.value.toLocaleString('pt-BR', {
-        style: 'currency',
-        currency: 'BRL',
-        maximumFractionDigits: 0,
-      }),
-    sortable: true,
-    sortValue: (row) => row.value,
-    align: 'end',
-  },
-  {
-    id: 'stage',
-    header: 'Etapa',
-    cell: (row) => (
-      <Badge tone={row.stage === 'Fechado' ? 'success' : 'neutral'}>{row.stage}</Badge>
-    ),
-  },
-];
-
-const PEOPLE = [
-  'Marina Duarte',
-  'Caio Fernandes',
-  'Beatriz Nogueira',
-  'Renan Albuquerque',
-  'Sofia Tavares',
-].map((name) => ({ name }));
-
-const CITIES = [
-  'São Paulo',
-  'Rio de Janeiro',
-  'Belo Horizonte',
-  'Curitiba',
-  'Porto Alegre',
-  'Salvador',
-].map((label) => ({
-  value: label,
-  label,
-}));
-
-function Tile({
-  title,
-  to,
-  className,
-  children,
-}: {
-  title: string;
-  to: string;
-  className?: string;
-  children: React.ReactNode;
-}) {
-  return (
-    <section className={`pg-tile ${className ?? ''}`} aria-label={title}>
-      <header className="pg-tile__head">
-        <h3 className="pg-tile__title">{title}</h3>
-        <a
-          className="pg-tile__link nui-focusable"
-          href={href(to)}
-          aria-label={`Abrir documentação: ${title}`}
-        >
-          <ArrowRight size={14} aria-hidden="true" />
-        </a>
-      </header>
-      <div className="pg-tile__body">{children}</div>
-    </section>
-  );
-}
-
-function InstallChip() {
-  const [copied, setCopied] = useState(false);
-  return (
-    <div className="pg-install">
-      <code className="pg-install__cmd">
-        <span aria-hidden="true">$ </span>
-        {INSTALL}
-      </code>
-      <button
-        type="button"
-        className="pg-install__copy nui-focusable"
-        aria-label="Copiar comando de instalação"
-        onClick={async () => {
-          if (await copyText(INSTALL)) {
-            setCopied(true);
-            window.setTimeout(() => setCopied(false), 2000);
-          }
-        }}
-      >
-        {copied ? <Check size={16} aria-hidden="true" /> : <Copy size={16} aria-hidden="true" />}
-        <span className="nui-visually-hidden" role="status">
-          {copied ? 'Comando copiado' : ''}
-        </span>
-      </button>
-    </div>
-  );
-}
-
-function HeroDemo() {
-  const { toast } = useToast();
-  return (
-    <Card title="Convidar para a equipe" headingLevel={2} className="pg-hero__card">
-      <form
-        className="pg-stack pg-stack--wide"
-        onSubmit={(event) => {
-          event.preventDefault();
-          toast({
-            title: 'Convite enviado',
-            description: 'Beatriz recebeu o e-mail.',
-            tone: 'success',
-          });
-        }}
-      >
-        <TextField label="E-mail" type="email" defaultValue="beatriz@lumen.com.br" />
-        <Select
-          label="Papel"
-          defaultValue="fin"
-          options={[
-            { value: 'adm', label: 'Administradora' },
-            { value: 'fin', label: 'Financeiro' },
-            { value: 'lei', label: 'Somente leitura' },
-          ]}
-        />
-        <Switch label="Avisar por e-mail" defaultChecked />
-        <div className="pg-row">
-          <Button type="submit">Enviar convite</Button>
-          <AvatarGroup
-            label="Já na equipe"
-            size="sm"
-            people={['Marina Duarte', 'Caio Fernandes', 'Sofia Tavares'].map((name) => ({ name }))}
-          />
-        </div>
-      </form>
-    </Card>
-  );
-}
-
-function ToastTile() {
-  const { toast } = useToast();
-  return (
-    <div className="pg-row">
-      <Button
-        variant="secondary"
-        size="sm"
-        onClick={() =>
-          toast({
-            title: 'Convite enviado',
-            description: 'Marina recebeu o e-mail.',
-            tone: 'success',
-          })
-        }
-      >
-        Disparar toast
-      </Button>
-      <Menu
-        label="Ações"
-        size="sm"
-        items={[
-          { id: 'a', label: 'Duplicar' },
-          { id: 'b', label: 'Arquivar', disabled: true },
-          { id: 'c', label: 'Excluir', tone: 'danger', separatorBefore: true },
-        ]}
-      />
-    </div>
-  );
-}
+import { GettingStarted } from './home/GettingStarted';
+import { HeroDemo, InstallChip, Tile, ToastTile } from './home/HomeParts';
+import { CITIES, DEALS, PEOPLE, PILLARS, dealColumns } from './home/homeData';
 
 export function HomePage() {
   const [page, setPage] = useState(3);
@@ -254,9 +41,9 @@ export function HomePage() {
             <span className="pg-hero__mark">prontas para vender.</span>
           </h1>
           <p className="pg-hero__lead">
-            {componentDocs.length} componentes acessíveis, tokens exportáveis, tema claro e escuro e
-            três telas completas montadas só com a biblioteca. Tudo documentado, testado no teclado
-            e verificado com axe.
+            {docMetas.length} componentes acessíveis, tokens exportáveis, tema claro e escuro e três
+            telas completas montadas só com a biblioteca. Tudo documentado, testado no teclado e
+            verificado com axe.
           </p>
           <div className="pg-hero__actions">
             <a
@@ -284,6 +71,8 @@ export function HomePage() {
           <HeroDemo />
         </div>
       </header>
+
+      <GettingStarted />
 
       <section aria-labelledby="sec-vitrine" className="pg-section">
         <p className="pg-eyebrow">Vitrine ao vivo</p>
@@ -404,10 +193,10 @@ export function HomePage() {
 
       <section aria-labelledby="sec-componentes" className="pg-section">
         <h2 id="sec-componentes" className="pg-h2">
-          {componentDocs.length} componentes
+          {docMetas.length} componentes
         </h2>
         <ul className="pg-index">
-          {componentDocs.map((doc) => {
+          {docMetas.map((doc) => {
             const Icon = iconFor(doc.slug);
             return (
               <li key={doc.slug}>

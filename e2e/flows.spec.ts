@@ -45,7 +45,7 @@ test('construtor de tema gera escala, passa no contraste e exporta o CSS', async
     '--nui-color-accent: #2563eb',
   );
   await page.getByLabel('Cor de destaque (hex)').fill('zzz');
-  await expect(page.getByText('Use o formato #rrggbb.')).toBeVisible();
+  await expect(page.getByText('Use o formato #rrggbb ou #rgb, como #ff5b14.')).toBeVisible();
 });
 
 test('painel: menu de ações abre por teclado e a paginação troca as linhas', async ({ page }) => {
