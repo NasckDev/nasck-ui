@@ -1,4 +1,5 @@
 .nui-table-wrap {
+  width: 100%;
   container-type: inline-size;
   font-family: var(--nui-font-family-sans);
   color: var(--nui-color-text);
@@ -137,7 +138,44 @@
     display: block;
   }
 
-  .nui-table__head {
+  /* The header stays reachable as a row of sort buttons: sighted and touch users can still sort. */
+  .nui-table__head tr {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--nui-space-2);
+    padding: var(--nui-space-3) var(--nui-space-4);
+    background: var(--nui-color-surface);
+    border-bottom: 1px solid var(--nui-color-border);
+  }
+
+  .nui-table__head tr:has(button)::before {
+    flex-basis: 100%;
+    content: attr(data-sort-label);
+    font-family: var(--nui-font-family-mono);
+    font-size: var(--nui-font-size-xs);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--nui-color-text-muted);
+  }
+
+  .nui-table__head .nui-table__th {
+    padding: 0;
+    background: none;
+    border: 0;
+  }
+
+  .nui-table__head .nui-table__th:not(:has(button)) {
+    display: none;
+  }
+
+  .nui-table__head .nui-table__sort {
+    padding: 0 var(--nui-space-3);
+    background: var(--nui-color-bg);
+    border: 1px solid var(--nui-color-border-strong);
+    border-radius: var(--nui-radius-sm);
+  }
+
+  .nui-table__head:not(:has(button)) {
     position: absolute;
     width: 1px;
     height: 1px;
@@ -154,7 +192,7 @@
     border-bottom: none;
   }
 
-  .nui-table__td,
+  .nui-table .nui-table__td,
   .nui-table tbody tr:last-child .nui-table__td {
     display: flex;
     align-items: center;
@@ -185,6 +223,11 @@
 @container (max-width: 40rem) {
   .nui-table__td--head::before {
     display: none;
+  }
+
+  .nui-table .nui-table__td--head {
+    justify-content: flex-start;
+    text-align: start;
   }
 }
 

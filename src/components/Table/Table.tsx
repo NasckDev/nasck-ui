@@ -12,19 +12,21 @@ export interface SortState {
   direction: SortDirection;
 }
 
-export interface TableColumn<Row> {
+interface TableColumnBase<Row> {
   id: string;
   header: string;
-  /** Cell content. Defaults to nothing: always provide it. */
+  /** Cell content. */
   cell: (row: Row) => ReactNode;
-  /** Makes the header a sort button. Provide `sortValue` to define the ordering. */
-  sortable?: boolean;
-  sortValue?: (row: Row) => string | number;
   /** Aligns numeric columns to the end. */
   align?: 'start' | 'end';
   /** Marks the column that names the row; its cells become row headers. */
   isRowHeader?: boolean;
 }
+
+/** A sortable column must say how to order its rows: `sortable` requires `sortValue`. */
+export type TableColumn<Row> =
+  | (TableColumnBase<Row> & { sortable: true; sortValue: (row: Row) => string | number })
+  | (TableColumnBase<Row> & { sortable?: false; sortValue?: undefined });
 
 export interface TableProps<Row> {
   /** Visible or screen-reader caption that names the table. */
@@ -37,10 +39,14 @@ export interface TableProps<Row> {
   sort?: SortState | null;
   defaultSort?: SortState | null;
   onSortChange?: (sort: SortState | null) => void;
+  /** Label of the sort controls when the table turns into cards. Defaults to "Ordenar por". */
+  sortLabel?: string;
   /** Shown instead of the body when there are no rows. */
   emptyMessage?: ReactNode;
   className?: string;
 }
+
+const collator = new Intl.Collator('pt-BR', { numeric: true });
 
 /** Stable sort by a column. Strings use the pt-BR collation, numbers compare numerically. */
 export const sortRows = <Row,>(
@@ -59,7 +65,7 @@ export const sortRows = <Row,>(
       const compared =
         typeof left === 'number' && typeof right === 'number'
           ? left - right
-          : String(left).localeCompare(String(right), 'pt-BR', { numeric: true });
+          : collator.compare(String(left), String(right));
       return compared * factor || a.index - b.index;
     })
     .map(({ row }) => row);
@@ -90,6 +96,7 @@ export function Table<Row>({
   sort,
   defaultSort = null,
   onSortChange,
+  sortLabel = 'Ordenar por',
   emptyMessage = 'Nada para mostrar.',
   className,
 }: TableProps<Row>) {
@@ -118,7 +125,7 @@ export function Table<Row>({
           {caption}
         </caption>
         <thead role="rowgroup" className="nui-table__head">
-          <tr role="row">
+          <tr role="row" data-sort-label={sortLabel}>
             {columns.map((column) => {
               const direction = current?.columnId === column.id ? current.direction : undefined;
               return (

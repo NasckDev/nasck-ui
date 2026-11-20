@@ -34,7 +34,10 @@ describe('Pagination', () => {
   it('goes to the next and previous pages with Enter and disables the ends', async () => {
     const user = userEvent.setup();
     render(<Harness />);
-    expect(screen.getByRole('button', { name: /Anterior/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Anterior/ })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
     screen.getByRole('button', { name: /Próxima/ }).focus();
     await user.keyboard('{Enter}');
     expect(screen.getByRole('button', { name: 'Página 2' })).toHaveAttribute(
@@ -52,7 +55,10 @@ describe('Pagination', () => {
     const user = userEvent.setup();
     render(<Harness />);
     await user.click(screen.getByRole('button', { name: 'Página 12' }));
-    expect(screen.getByRole('button', { name: /Próxima/ })).toBeDisabled();
+    expect(screen.getByRole('button', { name: /Próxima/ })).toHaveAttribute(
+      'aria-disabled',
+      'true',
+    );
     expect(screen.getByRole('button', { name: 'Página 12' })).toHaveAttribute(
       'aria-current',
       'page',

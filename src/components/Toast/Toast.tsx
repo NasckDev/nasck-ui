@@ -8,6 +8,9 @@ import {
   useState,
   type ReactNode,
 } from 'react';
+import { createPortal } from 'react-dom';
+import { useLayer } from '../../utils/layers';
+import { getPersistentRoot } from '../../utils/portalRoot';
 import { IconButton } from '../IconButton/IconButton';
 import './Toast.css';
 
@@ -49,15 +52,34 @@ interface ToastItemProps {
 
 function ToastItem({ record, dismissLabel, onDismiss }: ToastItemProps) {
   const { id, title, description, tone = 'neutral', duration = DEFAULT_TOAST_DURATION } = record;
+  const [paused, setPaused] = useState(false);
+  const remaining = useRef(duration ?? 0);
+  const startedAt = useRef(0);
 
+  // Pause on hover or focus (WCAG 2.2.1): the remaining time resumes when the pointer leaves.
   useEffect(() => {
-    if (duration === null) return undefined;
-    const timer = window.setTimeout(() => onDismiss(id), duration);
-    return () => window.clearTimeout(timer);
-  }, [duration, id, onDismiss]);
+    if (duration === null || paused) return undefined;
+    startedAt.current = Date.now();
+    const timer = window.setTimeout(() => onDismiss(id), remaining.current);
+    return () => {
+      window.clearTimeout(timer);
+      remaining.current = Math.max(remaining.current - (Date.now() - startedAt.current), 1000);
+    };
+  }, [duration, id, onDismiss, paused]);
+
+  // While the pointer or focus is on a toast, Escape dismisses it (and not a dialog behind it).
+  useLayer({ active: paused, onEscape: () => onDismiss(id) });
 
   return (
-    <li className="nui-toast" data-tone={tone}>
+    // The wrapper only tracks hover and focus to pause the timer; the dismiss button is the control.
+    <li
+      className="nui-toast"
+      data-tone={tone}
+      onMouseEnter={() => setPaused(true)}
+      onMouseLeave={() => setPaused(false)}
+      onFocus={() => setPaused(true)}
+      onBlur={() => setPaused(false)}
+    >
       <div className="nui-toast__content">
         <p className="nui-toast__title">{title}</p>
         {description ? <p className="nui-toast__description">{description}</p> : null}
@@ -84,7 +106,13 @@ export function ToastProvider({
   dismissLabel = 'Dispensar notificação',
 }: ToastProviderProps) {
   const [toasts, setToasts] = useState<ToastRecord[]>([]);
+  const [host, setHost] = useState<HTMLElement | null>(null);
   const nextId = useRef(0);
+
+  // The region lives in a body-level container that stays outside a modal's `inert` subtree.
+  useEffect(() => {
+    setHost(getPersistentRoot());
+  }, []);
 
   const dismiss = useCallback((id: number) => {
     setToasts((current) => current.filter((item) => item.id !== id));
@@ -102,18 +130,23 @@ export function ToastProvider({
   return (
     <ToastContext.Provider value={value}>
       {children}
-      <div role="status" aria-live="polite" aria-label={label} className="nui-toast-region">
-        <ol className="nui-toast-list">
-          {toasts.map((record) => (
-            <ToastItem
-              key={record.id}
-              record={record}
-              dismissLabel={dismissLabel}
-              onDismiss={dismiss}
-            />
-          ))}
-        </ol>
-      </div>
+      {host
+        ? createPortal(
+            <div role="status" aria-live="polite" aria-label={label} className="nui-toast-region">
+              <ol className="nui-toast-list">
+                {toasts.map((record) => (
+                  <ToastItem
+                    key={record.id}
+                    record={record}
+                    dismissLabel={dismissLabel}
+                    onDismiss={dismiss}
+                  />
+                ))}
+              </ol>
+            </div>,
+            host,
+          )
+        : null}
     </ToastContext.Provider>
   );
 }

@@ -8,7 +8,9 @@ import {
   type KeyboardEvent,
   type ReactNode,
 } from 'react';
+import { createPortal } from 'react-dom';
 import { cx } from '../../utils/cx';
+import { getPersistentRoot } from '../../utils/portalRoot';
 import { Button, type ButtonSize, type ButtonVariant } from '../Button/Button';
 import { IconButton } from '../IconButton/IconButton';
 import './Menu.css';
@@ -111,6 +113,10 @@ export function Menu({
   const [style, setStyle] = useState<CSSProperties>({});
   const triggerRef = useRef<HTMLButtonElement>(null);
   const itemRefs = useRef<Array<HTMLButtonElement | null>>([]);
+  const itemsRef = useRef(items);
+  useEffect(() => {
+    itemsRef.current = items;
+  });
   const pendingFocus = useRef<InitialFocus>('first');
   const typeahead = useRef({ text: '', timer: 0 });
 
@@ -128,8 +134,13 @@ export function Menu({
 
   useEffect(() => {
     if (!open) return undefined;
+    // Initial focus runs once per opening: `items` is read through a ref so a parent re-render
+    // (new array identity) does not pull focus back to the first item.
+    const current = itemsRef.current;
     const initial =
-      pendingFocus.current === 'first' ? nextMenuIndex(items, -1, 1) : nextMenuIndex(items, 0, -1);
+      pendingFocus.current === 'first'
+        ? nextMenuIndex(current, -1, 1)
+        : nextMenuIndex(current, 0, -1);
     itemRefs.current[initial]?.focus();
     const handlePointerDown = (event: PointerEvent) => {
       const target = event.target as Node;
@@ -147,7 +158,7 @@ export function Menu({
       window.removeEventListener('resize', handleDismiss);
       window.removeEventListener('scroll', handleDismiss, true);
     };
-  }, [open, items, closeMenu]);
+  }, [open, closeMenu]);
 
   const handleTriggerKeyDown = (event: KeyboardEvent<HTMLButtonElement>) => {
     if (event.key === 'ArrowDown') {
@@ -173,7 +184,8 @@ export function Menu({
       event.preventDefault();
       return closeMenu(true);
     }
-    if (event.key === 'Tab') return closeMenu(false);
+    // Tab closes the menu and leaves from the trigger, so focus continues in the page order.
+    if (event.key === 'Tab') return closeMenu(true);
     if (event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey) {
       window.clearTimeout(typeahead.current.timer);
       typeahead.current.text += event.key;
@@ -218,47 +230,50 @@ export function Menu({
           {label}
         </Button>
       )}
-      {open ? (
-        // Key handling for the focused item bubbles here, per the APG menu pattern.
-        <div
-          id={menuId}
-          role="menu"
-          tabIndex={-1}
-          aria-label={label}
-          className="nui-menu__list"
-          style={style}
-          onKeyDown={handleMenuKeyDown}
-        >
-          {items.map((item, index) => (
+      {open
+        ? createPortal(
+            // Key handling for the focused item bubbles here, per the APG menu pattern.
             <div
-              key={item.id}
-              role="none"
-              className="nui-menu__row"
-              data-separated={item.separatorBefore}
+              id={menuId}
+              role="menu"
+              tabIndex={-1}
+              aria-label={label}
+              className="nui-menu__list"
+              style={style}
+              onKeyDown={handleMenuKeyDown}
             >
-              <button
-                ref={(node) => {
-                  itemRefs.current[index] = node;
-                }}
-                type="button"
-                role="menuitem"
-                tabIndex={-1}
-                aria-disabled={item.disabled || undefined}
-                className="nui-menu__item"
-                data-tone={item.tone ?? 'default'}
-                onClick={() => select(item)}
-              >
-                {item.icon ? (
-                  <span className="nui-menu__icon" aria-hidden="true">
-                    {item.icon}
-                  </span>
-                ) : null}
-                {item.label}
-              </button>
-            </div>
-          ))}
-        </div>
-      ) : null}
+              {items.map((item, index) => (
+                <div
+                  key={item.id}
+                  role="none"
+                  className="nui-menu__row"
+                  data-separated={item.separatorBefore}
+                >
+                  <button
+                    ref={(node) => {
+                      itemRefs.current[index] = node;
+                    }}
+                    type="button"
+                    role="menuitem"
+                    tabIndex={-1}
+                    aria-disabled={item.disabled || undefined}
+                    className="nui-menu__item"
+                    data-tone={item.tone ?? 'default'}
+                    onClick={() => select(item)}
+                  >
+                    {item.icon ? (
+                      <span className="nui-menu__icon" aria-hidden="true">
+                        {item.icon}
+                      </span>
+                    ) : null}
+                    {item.label}
+                  </button>
+                </div>
+              ))}
+            </div>,
+            getPersistentRoot(),
+          )
+        : null}
     </span>
   );
 }

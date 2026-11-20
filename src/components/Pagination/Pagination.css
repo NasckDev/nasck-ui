@@ -32,7 +32,7 @@
   font-weight: var(--nui-font-weight-medium);
 }
 
-.nui-pagination__button:hover:not(:disabled, [aria-current='page']) {
+.nui-pagination__button:hover:not([aria-disabled='true'], [aria-current='page']) {
   background: var(--nui-color-surface);
 }
 
@@ -43,7 +43,7 @@
   cursor: default;
 }
 
-.nui-pagination__button:disabled {
+.nui-pagination__button[aria-disabled='true'] {
   opacity: 0.45;
   cursor: not-allowed;
 }
@@ -52,4 +52,18 @@
   min-width: 1.5rem;
   color: var(--nui-color-text-muted);
   text-align: center;
+}
+
+@media (forced-colors: active) {
+  .nui-pagination__button[aria-current='page'] {
+    border: 2px solid Highlight;
+    text-decoration: underline;
+  }
+}
+
+@media (pointer: coarse), (max-width: 40rem) {
+  .nui-pagination__button {
+    min-width: 2.75rem;
+    min-height: 2.75rem;
+  }
 }

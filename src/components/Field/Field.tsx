@@ -49,15 +49,16 @@ export function FieldMessages({ ids, description, error }: FieldMessagesProps) {
 }
 
 interface FieldLabelProps {
+  id?: string;
   htmlFor: string;
   required: boolean | undefined;
   children: ReactNode;
 }
 
 /** Visible label; the required marker is decorative because `required` is announced natively. */
-export function FieldLabel({ htmlFor, required, children }: FieldLabelProps) {
+export function FieldLabel({ id, htmlFor, required, children }: FieldLabelProps) {
   return (
-    <label htmlFor={htmlFor} className="nui-field__label">
+    <label id={id} htmlFor={htmlFor} className="nui-field__label">
       {children}
       {required ? (
         <span className="nui-field__required" aria-hidden="true">

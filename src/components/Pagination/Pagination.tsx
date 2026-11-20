@@ -48,13 +48,16 @@ export function Pagination({
 
   return (
     <nav aria-label={label} className={cx('nui-pagination', className)}>
+      <span className="nui-visually-hidden" role="status" aria-live="polite">
+        Página {page} de {pageCount}
+      </span>
       <ul className="nui-pagination__list">
         <li>
           <button
             type="button"
             className="nui-pagination__button nui-pagination__step nui-focusable"
-            disabled={page <= 1}
-            onClick={() => go(page - 1)}
+            aria-disabled={page <= 1 || undefined}
+            onClick={() => page > 1 && go(page - 1)}
           >
             <span aria-hidden="true">←</span> Anterior
           </button>
@@ -82,8 +85,8 @@ export function Pagination({
           <button
             type="button"
             className="nui-pagination__button nui-pagination__step nui-focusable"
-            disabled={page >= pageCount}
-            onClick={() => go(page + 1)}
+            aria-disabled={page >= pageCount || undefined}
+            onClick={() => page < pageCount && go(page + 1)}
           >
             Próxima <span aria-hidden="true">→</span>
           </button>

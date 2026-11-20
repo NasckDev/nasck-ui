@@ -49,3 +49,30 @@
 .nui-switch .nui-field__description {
   padding-inline-start: calc(2.75rem + var(--nui-space-3));
 }
+
+@media (forced-colors: active) {
+  .nui-switch__track {
+    border: 2px solid ButtonText;
+    background: Canvas;
+    forced-color-adjust: none;
+  }
+
+  .nui-switch__track[aria-checked='true'] {
+    background: Highlight;
+    border-color: Highlight;
+  }
+
+  .nui-switch__thumb {
+    background: ButtonText;
+  }
+
+  .nui-switch__track[aria-checked='true'] .nui-switch__thumb {
+    background: HighlightText;
+  }
+}
+
+@media (pointer: coarse), (max-width: 40rem) {
+  .nui-switch__row {
+    min-height: 2.75rem;
+  }
+}

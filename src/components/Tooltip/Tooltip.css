@@ -4,9 +4,7 @@
 }
 
 .nui-tooltip__bubble {
-  position: absolute;
-  left: 50%;
-  bottom: calc(100% + var(--nui-space-2));
+  position: fixed;
   z-index: var(--nui-z-index-tooltip);
   width: max-content;
   max-width: 16rem;
@@ -17,14 +15,8 @@
   background: var(--nui-color-text);
   border-radius: var(--nui-radius-sm);
   box-shadow: var(--nui-shadow-md);
-  transform: translateX(-50%);
   pointer-events: none;
   animation: nui-fade-in var(--nui-motion-duration-fast) var(--nui-motion-easing-standard);
-}
-
-.nui-tooltip__bubble[data-placement='bottom'] {
-  top: calc(100% + var(--nui-space-2));
-  bottom: auto;
 }
 
 .nui-tooltip__bubble[hidden] {

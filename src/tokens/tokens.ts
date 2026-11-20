@@ -140,7 +140,7 @@ export const tokens = {
   },
   zIndex: {
     tooltip: '1000',
-    menu: '1050',
+    menu: '1250',
     overlay: '1100',
     dialog: '1200',
     toast: '1300',

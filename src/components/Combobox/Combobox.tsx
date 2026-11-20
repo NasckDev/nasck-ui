@@ -1,5 +1,6 @@
 import { useId, useMemo, useRef, useState, type KeyboardEvent, type ReactNode } from 'react';
 import { cx } from '../../utils/cx';
+import { normalizeText } from '../../utils/text';
 import { FieldLabel, FieldMessages, useFieldIds } from '../Field/Field';
 import './Combobox.css';
 
@@ -23,14 +24,16 @@ export interface ComboboxProps {
   required?: boolean;
   disabled?: boolean;
   id?: string;
+  /** Field name: the selected value is submitted with the form through a hidden input. */
+  name?: string;
   /** Text shown when the filter matches nothing. */
   emptyMessage?: string;
+  /** Accessible name of the clear button. */
+  clearLabel?: string;
   className?: string;
 }
 
-/** Lowercase and strip accents so "sao" finds "São Paulo". */
-export const normalizeText = (text: string): string =>
-  text.normalize('NFD').replace(/[̀-ͯ]/g, '').toLowerCase();
+export { normalizeText };
 
 /** Options whose label contains the query (accent and case insensitive). */
 export const filterOptions = (
@@ -52,7 +55,8 @@ const nextEnabled = (options: readonly ComboboxOption[], from: number, step: 1 |
 
 /**
  * Editable combobox with list autocomplete (APG): the input keeps DOM focus and points to the
- * highlighted option with `aria-activedescendant`. ↓/↑ move, Enter selects, Esc closes, Tab leaves.
+ * highlighted option with `aria-activedescendant`. ↓/↑ move, Enter selects, Esc closes (and clears
+ * when already closed), Tab leaves. Emptying the field clears the selection to `null`.
  */
 export function Combobox({
   label,
@@ -66,10 +70,13 @@ export function Combobox({
   required,
   disabled,
   id,
+  name,
   emptyMessage = 'Nenhum resultado',
+  clearLabel = 'Limpar seleção',
   className,
 }: ComboboxProps) {
   const listId = useId();
+  const labelId = useId();
   const ids = useFieldIds({ id, hasDescription: Boolean(description), hasError: Boolean(error) });
   const [internal, setInternal] = useState<string | null>(defaultValue);
   const selected = value === undefined ? internal : value;
@@ -81,15 +88,27 @@ export function Combobox({
   const [filtering, setFiltering] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  // Keep the text in sync when the selection changes from outside (controlled `value`) or when the
+  // options arrive after mount, but never while the person is typing.
+  const [syncedLabel, setSyncedLabel] = useState(selectedLabel);
+  if (syncedLabel !== selectedLabel) {
+    setSyncedLabel(selectedLabel);
+    if (!filtering) setText(selectedLabel);
+  }
+
   const visible = useMemo(
     () => (filtering ? filterOptions(options, text) : options),
     [filtering, options, text],
   );
 
+  const select = (next: string | null) => {
+    if (value === undefined) setInternal(next);
+    onValueChange?.(next);
+  };
+
   const commit = (option: ComboboxOption) => {
     if (option.disabled) return;
-    if (value === undefined) setInternal(option.value);
-    onValueChange?.(option.value);
+    select(option.value);
     setText(option.label);
     setFiltering(false);
     setOpen(false);
@@ -101,6 +120,14 @@ export function Combobox({
     setActive(-1);
     setFiltering(false);
     setText(selectedLabel);
+  };
+
+  const clear = () => {
+    select(null);
+    setText('');
+    setFiltering(false);
+    setOpen(false);
+    setActive(-1);
   };
 
   const openList = (startAt: 'first' | 'last' | 'selected') => {
@@ -130,11 +157,15 @@ export function Combobox({
       if (open) {
         event.preventDefault();
         close();
+      } else if (text) {
+        event.preventDefault();
+        clear();
       }
     }
   };
 
-  const activeId = open && active >= 0 ? `${listId}-option-${active}` : undefined;
+  const showList = open && visible.length > 0;
+  const activeId = showList && active >= 0 ? `${listId}-option-${active}` : undefined;
   const status = !open
     ? ''
     : visible.length === 0
@@ -143,7 +174,7 @@ export function Combobox({
 
   return (
     <div className={cx('nui-field', 'nui-combobox', className)}>
-      <FieldLabel htmlFor={ids.controlId} required={required}>
+      <FieldLabel id={labelId} htmlFor={ids.controlId} required={required}>
         {label}
       </FieldLabel>
       <div className="nui-combobox__wrap">
@@ -153,7 +184,7 @@ export function Combobox({
           type="text"
           role="combobox"
           autoComplete="off"
-          aria-expanded={open}
+          aria-expanded={showList}
           aria-controls={listId}
           aria-autocomplete="list"
           aria-activedescendant={activeId}
@@ -165,22 +196,40 @@ export function Combobox({
           disabled={disabled}
           value={text}
           onChange={(event) => {
-            setText(event.target.value);
+            const next = event.target.value;
+            setText(next);
             setFiltering(true);
             setOpen(true);
             setActive(-1);
+            if (next === '' && selected !== null) select(null);
           }}
           onKeyDown={handleKeyDown}
           onBlur={close}
           onFocus={(event) => event.target.select()}
         />
+        {name ? <input type="hidden" name={name} value={selected ?? ''} /> : null}
+        {selected !== null && !disabled ? (
+          <button
+            type="button"
+            tabIndex={-1}
+            aria-label={clearLabel}
+            className="nui-combobox__clear"
+            // Keep focus in the input so blur does not interfere with the click.
+            onMouseDown={(event) => event.preventDefault()}
+            onClick={() => {
+              clear();
+              inputRef.current?.focus();
+            }}
+          >
+            <span aria-hidden="true">×</span>
+          </button>
+        ) : null}
         <button
           type="button"
           tabIndex={-1}
           aria-label="Mostrar opções"
           disabled={disabled}
           className="nui-combobox__toggle"
-          // Keep focus in the input so blur does not close the list before the click lands.
           onMouseDown={(event) => event.preventDefault()}
           onClick={() => {
             inputRef.current?.focus();
@@ -193,8 +242,8 @@ export function Combobox({
         <ul
           id={listId}
           role="listbox"
-          aria-label={typeof label === 'string' ? label : undefined}
-          hidden={!open}
+          aria-labelledby={labelId}
+          hidden={!showList}
           className="nui-combobox__list"
         >
           {visible.map((option, index) => (
@@ -218,12 +267,10 @@ export function Combobox({
               ) : null}
             </li>
           ))}
-          {visible.length === 0 ? (
-            <li role="presentation" className="nui-combobox__empty">
-              {emptyMessage}
-            </li>
-          ) : null}
         </ul>
+        {open && visible.length === 0 ? (
+          <p className="nui-combobox__list nui-combobox__empty">{emptyMessage}</p>
+        ) : null}
       </div>
       <FieldMessages ids={ids} description={description} error={error} />
       <span className="nui-visually-hidden" role="status" aria-live="polite">

@@ -1,11 +1,11 @@
-import type { ComponentPropsWithoutRef, ReactNode } from 'react';
+import type { ComponentPropsWithRef, ReactNode } from 'react';
 import { cx } from '../../utils/cx';
 import { useControllableState } from '../../utils/useControllableState';
 import { FieldMessages, useFieldIds } from '../Field/Field';
 import './Switch.css';
 
 export interface SwitchProps extends Omit<
-  ComponentPropsWithoutRef<'button'>,
+  ComponentPropsWithRef<'button'>,
   'onChange' | 'value' | 'defaultValue'
 > {
   label: ReactNode;

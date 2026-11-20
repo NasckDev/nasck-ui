@@ -31,6 +31,7 @@ export function Button({
   className,
   children,
   onClick,
+  'aria-disabled': ariaDisabled,
   ...rest
 }: ButtonProps) {
   const handleClick = (event: MouseEvent<HTMLButtonElement>) => {
@@ -49,7 +50,7 @@ export function Button({
       data-variant={variant}
       data-size={size}
       aria-busy={loading || undefined}
-      aria-disabled={loading || undefined}
+      aria-disabled={loading ? true : ariaDisabled}
       onClick={handleClick}
     >
       {loading ? <Spinner /> : startIcon}

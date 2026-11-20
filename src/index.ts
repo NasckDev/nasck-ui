@@ -29,6 +29,7 @@ export { Skeleton } from './components/Skeleton/Skeleton';
 export type { SkeletonProps } from './components/Skeleton/Skeleton';
 export { EmptyState } from './components/EmptyState/EmptyState';
 export type { EmptyStateProps } from './components/EmptyState/EmptyState';
+export { normalizeText } from './utils/text';
 export { tokens } from './tokens';
 export type { Tokens, ThemeName, ColorRole } from './tokens';
 export { Avatar, AvatarGroup } from './components/Avatar/Avatar';

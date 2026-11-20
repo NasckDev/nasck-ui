@@ -51,11 +51,16 @@ export function Tabs({ label, items, value, defaultValue, onValueChange, classNa
   const baseId = useId();
   const tabRefs = useRef<Array<HTMLButtonElement | null>>([]);
   const firstEnabled = items.find((item) => !item.disabled)?.id ?? '';
-  const [selected, setSelected] = useControllableState({
+  const [requested, setSelected] = useControllableState({
     value,
     defaultValue: defaultValue ?? firstEnabled,
     onChange: onValueChange,
   });
+
+  // An unknown or disabled value falls back to the first enabled tab: the tablist stays reachable.
+  const selected = items.some((item) => item.id === requested && !item.disabled)
+    ? requested
+    : firstEnabled;
 
   const handleKeyDown = (event: KeyboardEvent<HTMLButtonElement>, index: number) => {
     if (!isNavigationKey(event.key)) return;
@@ -80,9 +85,9 @@ export function Tabs({ label, items, value, defaultValue, onValueChange, classNa
               }}
               type="button"
               role="tab"
-              id={`${baseId}-tab-${item.id}`}
+              id={`${baseId}-tab-${index}`}
               aria-selected={isSelected}
-              aria-controls={`${baseId}-panel-${item.id}`}
+              aria-controls={`${baseId}-panel-${index}`}
               tabIndex={isSelected ? 0 : -1}
               disabled={item.disabled}
               className="nui-tabs__tab nui-focusable"
@@ -94,12 +99,12 @@ export function Tabs({ label, items, value, defaultValue, onValueChange, classNa
           );
         })}
       </div>
-      {items.map((item) => (
+      {items.map((item, index) => (
         <div
           key={item.id}
           role="tabpanel"
-          id={`${baseId}-panel-${item.id}`}
-          aria-labelledby={`${baseId}-tab-${item.id}`}
+          id={`${baseId}-panel-${index}`}
+          aria-labelledby={`${baseId}-tab-${index}`}
           hidden={item.id !== selected}
           tabIndex={0}
           className="nui-tabs__panel nui-focusable"

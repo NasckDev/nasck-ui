@@ -152,3 +152,20 @@ describe('sort helpers', () => {
     expect(nextSort({ columnId: 'a', direction: 'descending' }, 'a')).toBeNull();
   });
 });
+
+describe('Table card layout controls', () => {
+  it('keeps the header sort buttons and exposes the label used when rows become cards', () => {
+    render(
+      <Table
+        caption="Clientes"
+        sortLabel="Ordenar clientes por"
+        columns={columns}
+        rows={rows}
+        getRowId={(row) => row.id}
+      />,
+    );
+    const headerRow = screen.getAllByRole('row')[0] as HTMLElement;
+    expect(headerRow).toHaveAttribute('data-sort-label', 'Ordenar clientes por');
+    expect(within(headerRow).getAllByRole('button')).toHaveLength(2);
+  });
+});

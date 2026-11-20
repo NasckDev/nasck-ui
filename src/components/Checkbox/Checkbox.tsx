@@ -1,9 +1,10 @@
-import { useEffect, useRef, type ComponentPropsWithoutRef, type ReactNode } from 'react';
+import { useEffect, useRef, type ComponentPropsWithRef, type ReactNode } from 'react';
+import { mergeRefs } from '../../utils/mergeRefs';
 import { cx } from '../../utils/cx';
 import { FieldMessages, useFieldIds } from '../Field/Field';
 import './Checkbox.css';
 
-export interface CheckboxProps extends Omit<ComponentPropsWithoutRef<'input'>, 'type'> {
+export interface CheckboxProps extends Omit<ComponentPropsWithRef<'input'>, 'type'> {
   label: ReactNode;
   description?: ReactNode;
   error?: ReactNode;
@@ -18,6 +19,7 @@ export function Checkbox({
   indeterminate = false,
   id,
   className,
+  ref,
   ...rest
 }: CheckboxProps) {
   const inputRef = useRef<HTMLInputElement>(null);
@@ -32,7 +34,7 @@ export function Checkbox({
       <div className="nui-checkbox__row">
         <input
           {...rest}
-          ref={inputRef}
+          ref={mergeRefs(inputRef, ref)}
           id={ids.controlId}
           type="checkbox"
           className="nui-checkbox__input nui-focusable"

@@ -80,3 +80,9 @@
     transform: translateY(-4px);
   }
 }
+
+@media (pointer: coarse), (max-width: 40rem) {
+  .nui-menu__item {
+    min-height: 2.75rem;
+  }
+}

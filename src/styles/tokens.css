@@ -42,7 +42,7 @@
   --nui-motion-easing-standard: cubic-bezier(0.2, 0, 0, 1);
   --nui-motion-easing-emphasized: cubic-bezier(0.3, 0, 0, 1);
   --nui-z-index-tooltip: 1000;
-  --nui-z-index-menu: 1050;
+  --nui-z-index-menu: 1250;
   --nui-z-index-overlay: 1100;
   --nui-z-index-dialog: 1200;
   --nui-z-index-toast: 1300;

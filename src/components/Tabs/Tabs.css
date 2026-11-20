@@ -49,3 +49,13 @@
   padding: var(--nui-space-4) var(--nui-space-1);
   border-radius: var(--nui-radius-sm);
 }
+
+@media (forced-colors: active) {
+  .nui-tabs__tab[aria-selected='true'] {
+    border-bottom: 3px solid Highlight;
+  }
+
+  .nui-tabs__tab[aria-selected='true']::after {
+    display: none;
+  }
+}

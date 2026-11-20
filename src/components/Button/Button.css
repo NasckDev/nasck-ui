@@ -94,3 +94,10 @@
     animation-duration: 2s;
   }
 }
+
+@media (pointer: coarse), (max-width: 40rem) {
+  .nui-button,
+  .nui-button[data-size='sm'] {
+    min-height: 2.75rem;
+  }
+}

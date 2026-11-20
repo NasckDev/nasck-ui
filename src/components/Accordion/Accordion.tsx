@@ -91,10 +91,10 @@ export function Accordion({
                   buttons.current[index] = node;
                 }}
                 type="button"
-                id={`${baseId}-header-${item.id}`}
+                id={`${baseId}-header-${index}`}
                 className="nui-accordion__trigger nui-focusable"
                 aria-expanded={isOpen}
-                aria-controls={`${baseId}-panel-${item.id}`}
+                aria-controls={`${baseId}-panel-${index}`}
                 disabled={item.disabled}
                 onClick={() => toggle(item.id)}
                 onKeyDown={(event) => handleKeyDown(event, index)}
@@ -105,8 +105,8 @@ export function Accordion({
             </Heading>
             <div
               role="region"
-              id={`${baseId}-panel-${item.id}`}
-              aria-labelledby={`${baseId}-header-${item.id}`}
+              id={`${baseId}-panel-${index}`}
+              aria-labelledby={`${baseId}-header-${index}`}
               className="nui-accordion__panel"
             >
               <div className="nui-accordion__panel-inner">

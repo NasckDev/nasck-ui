@@ -28,3 +28,14 @@
 .nui-checkbox .nui-field__error {
   padding-inline-start: calc(1.25rem + var(--nui-space-2));
 }
+
+@media (pointer: coarse), (max-width: 40rem) {
+  .nui-checkbox__row {
+    min-height: 2.75rem;
+  }
+
+  .nui-checkbox__input {
+    width: 1.5rem;
+    height: 1.5rem;
+  }
+}
