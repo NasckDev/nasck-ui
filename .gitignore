@@ -4,3 +4,5 @@ playground-dist
 coverage
 *.log
 .DS_Store
+test-results
+playwright-report

@@ -23,7 +23,24 @@ export const CONTRAST_PAIRS: readonly ContrastPair[] = [
     background: 'accent',
     required: 4.5,
   },
-  { label: 'Destaque sobre fundo', foreground: 'accent', background: 'bg', required: 4.5 },
+  {
+    label: 'Texto de destaque sobre fundo',
+    foreground: 'accentText',
+    background: 'bg',
+    required: 4.5,
+  },
+  {
+    label: 'Texto sobre primária',
+    foreground: 'textOnPrimary',
+    background: 'primary',
+    required: 4.5,
+  },
+  {
+    label: 'Laranja de assinatura sobre fundo',
+    foreground: 'accent',
+    background: 'bg',
+    required: 3,
+  },
   { label: 'Perigo sobre fundo', foreground: 'danger', background: 'bg', required: 4.5 },
   {
     label: 'Perigo sobre superfície de perigo',
@@ -50,8 +67,8 @@ export const CONTRAST_PAIRS: readonly ContrastPair[] = [
     required: 4.5,
   },
   {
-    label: 'Destaque sobre superfície de destaque',
-    foreground: 'accent',
+    label: 'Texto de destaque sobre superfície de destaque',
+    foreground: 'accentText',
     background: 'accentSurface',
     required: 4.5,
   },
@@ -69,10 +86,11 @@ export const COLOR_GROUPS: ReadonlyArray<{ title: string; roles: readonly ColorR
     title: 'Superfícies e bordas',
     roles: ['bg', 'surface', 'surfaceRaised', 'border', 'borderStrong', 'skeleton', 'overlay'],
   },
-  { title: 'Texto', roles: ['text', 'textMuted', 'textOnAccent'] },
+  { title: 'Texto', roles: ['text', 'textMuted', 'textOnAccent', 'textOnPrimary'] },
+  { title: 'Primária (tinta)', roles: ['primary', 'primaryHover', 'primaryActive'] },
   {
     title: 'Destaque',
-    roles: ['accent', 'accentHover', 'accentActive', 'accentSurface', 'focusRing'],
+    roles: ['accent', 'accentHover', 'accentActive', 'accentText', 'accentSurface', 'focusRing'],
   },
   {
     title: 'Estados',

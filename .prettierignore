@@ -6,3 +6,5 @@ package-lock.json
 CHANGELOG.md
 .changeset/*.md
 src/styles/tokens.css
+test-results
+playwright-report

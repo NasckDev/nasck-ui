@@ -1,6 +1,6 @@
 {
   "name": "@nasckdev/nasck-ui",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Accessible Product Interface System: design tokens, accessible React components and a living-docs playground.",
   "license": "MIT",
   "author": "Alexandre Diogo Nascimento",
@@ -54,7 +54,9 @@
     "version-packages": "changeset version",
     "playground": "vite --config playground/vite.config.ts",
     "build:playground": "vite build --config playground/vite.config.ts",
-    "preview:playground": "vite preview --config playground/vite.config.ts"
+    "preview:playground": "vite preview --config playground/vite.config.ts",
+    "test:e2e": "playwright test",
+    "build:portable": "npm run build:playground"
   },
   "peerDependencies": {
     "react": ">=18.2.0",

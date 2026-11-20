@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Badge, Button, Select, tokens, type ColorRole, type ThemeName } from '../../../src';
 import { contrastLevel, contrastRatio, type ContrastLevel } from '../contrast';
+import { ThemeBuilder } from './ThemeBuilder';
 import { COLOR_GROUPS, CONTRAST_PAIRS } from './tokensData';
 
 const LEVEL_LABEL: Record<ContrastLevel, string> = {
@@ -80,8 +81,8 @@ function ContrastTable({ theme }: { theme: ThemeName }) {
               <tr key={pair.label}>
                 <th scope="row">{pair.label}</th>
                 <td>
-                  <span className="pg-sample" style={{ color: fg, background: bg }}>
-                    Aa
+                  <span className="pg-sample" style={{ background: bg }} aria-hidden="true">
+                    <span className="pg-sample__dot" style={{ background: fg }} />
                   </span>
                 </td>
                 <td className="pg-num">{ratio.toFixed(2)}:1</td>
@@ -144,6 +145,8 @@ export function TokensPage() {
         </p>
       </header>
 
+      <ThemeBuilder />
+
       <section aria-labelledby="sec-cores" className="pg-section">
         <h2 id="sec-cores" className="pg-h2">
           Cores
@@ -189,14 +192,18 @@ export function TokensPage() {
         <div className="pg-grid pg-grid--2">
           <div>
             <h3 className="pg-h3">Famílias</h3>
+            <p className="pg-sample-text" style={{ fontFamily: tokens.font.family.display }}>
+              Display · {familyName(tokens.font.family.display)}
+            </p>
             <p className="pg-sample-text" style={{ fontFamily: tokens.font.family.sans }}>
-              Sans · {familyName(tokens.font.family.sans)}
+              Texto · {familyName(tokens.font.family.sans)}
             </p>
             <p className="pg-sample-text" style={{ fontFamily: tokens.font.family.mono }}>
-              Mono · {familyName(tokens.font.family.mono)}
+              Código · {familyName(tokens.font.family.mono)}
             </p>
             <p className="pg-note">
-              As fontes são empilhadas com fallback do sistema; nada é baixado de terceiros.
+              Fontes auto-hospedadas via @fontsource, empilhadas com fallback do sistema; nenhuma
+              requisição externa.
             </p>
           </div>
           <div>

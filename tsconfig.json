@@ -20,5 +20,5 @@
     "types": ["vitest/globals", "@testing-library/jest-dom/vitest", "vite/client", "node"],
     "noEmit": true
   },
-  "include": ["src", "playground", "vite.config.ts"]
+  "include": ["src", "playground", "e2e", "vite.config.ts", "playwright.config.ts"]
 }
