@@ -10,7 +10,7 @@ interface ControllableStateOptions<T> {
  * Supports both controlled (`value` + `onChange`) and uncontrolled (`defaultValue`) usage,
  * the convention every stateful Nasck UI component follows.
  */
-export const useControllableState = <T,>({
+export const useControllableState = <T>({
   value,
   defaultValue,
   onChange,

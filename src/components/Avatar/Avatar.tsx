@@ -45,7 +45,12 @@ export function Avatar({ name, src, size = 'md', className, ...rest }: AvatarPro
       data-tone={getToneIndex(name)}
     >
       {showImage ? (
-        <img src={src} alt="" className="nui-avatar__image" onError={() => setFailedSrc(src ?? null)} />
+        <img
+          src={src}
+          alt=""
+          className="nui-avatar__image"
+          onError={() => setFailedSrc(src ?? null)}
+        />
       ) : (
         <span className="nui-avatar__initials" aria-hidden="true">
           {getInitials(name)}
@@ -76,7 +81,9 @@ export function AvatarGroup({ label, people, max = 4, size = 'md', className }: 
         <Avatar key={person.name} name={person.name} src={person.src} size={size} />
       ))}
       {hidden > 0 ? (
-        <span role="img" aria-label={`mais ${hidden}`}
+        <span
+          role="img"
+          aria-label={`mais ${hidden}`}
           className="nui-avatar nui-avatar--count"
           data-size={size}
         >

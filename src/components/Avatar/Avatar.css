@@ -70,7 +70,7 @@
 }
 
 .nui-avatar-group > .nui-avatar + .nui-avatar {
-  margin-inline-start: calc(var(--nui-avatar-size, 2.5rem) * -0.28);
+  margin-inline-start: calc(var(--nui-avatar-size, 2.5rem) * -0.14);
 }
 
 .nui-avatar--count {

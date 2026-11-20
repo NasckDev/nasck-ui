@@ -220,10 +220,10 @@ export function Menu({
       )}
       {open ? (
         // Key handling for the focused item bubbles here, per the APG menu pattern.
-        // eslint-disable-next-line jsx-a11y/no-static-element-interactions
         <div
           id={menuId}
           role="menu"
+          tabIndex={-1}
           aria-label={label}
           className="nui-menu__list"
           style={style}

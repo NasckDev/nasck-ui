@@ -77,7 +77,8 @@ export const tokens = {
   },
   font: {
     family: {
-      display: "'Space Grotesk Variable', 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif",
+      display:
+        "'Space Grotesk Variable', 'Space Grotesk', system-ui, -apple-system, 'Segoe UI', sans-serif",
       sans: "'DM Sans Variable', 'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
       mono: "'Space Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace",
     },

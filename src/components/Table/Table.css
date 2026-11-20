@@ -67,13 +67,24 @@
 }
 
 .nui-table__sort-icon {
-  width: 0.5rem;
-  height: 0.75rem;
-  background:
-    linear-gradient(currentColor, currentColor) center / 1px 100% no-repeat,
-    transparent;
-  opacity: 0.45;
-  clip-path: polygon(50% 0, 100% 35%, 0 35%, 50% 0, 50% 100%, 100% 65%, 0 65%, 50% 100%);
+  display: inline-flex;
+  flex-direction: column;
+  gap: 2px;
+  opacity: 0.5;
+}
+
+.nui-table__sort-icon::before,
+.nui-table__sort-icon::after {
+  content: '';
+  border-inline: 4px solid transparent;
+}
+
+.nui-table__sort-icon::before {
+  border-bottom: 4px solid currentColor;
+}
+
+.nui-table__sort-icon::after {
+  border-top: 4px solid currentColor;
 }
 
 .nui-table__sort-icon[data-direction] {
@@ -81,14 +92,9 @@
   color: var(--nui-color-accent-text);
 }
 
-.nui-table__sort-icon[data-direction='ascending'] {
-  clip-path: polygon(50% 0, 100% 45%, 0 45%);
-  background: currentColor;
-}
-
-.nui-table__sort-icon[data-direction='descending'] {
-  clip-path: polygon(0 55%, 100% 55%, 50% 100%);
-  background: currentColor;
+.nui-table__sort-icon[data-direction='ascending']::after,
+.nui-table__sort-icon[data-direction='descending']::before {
+  opacity: 0.25;
 }
 
 .nui-table__td {
@@ -179,5 +185,11 @@
 @container (max-width: 40rem) {
   .nui-table__td--head::before {
     display: none;
+  }
+}
+
+@container (max-width: 40rem) {
+  .nui-table__caption {
+    display: block;
   }
 }

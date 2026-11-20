@@ -5,7 +5,8 @@ export const CSS_VAR_PREFIX = 'nui';
 
 type TokenTree = { readonly [key: string]: string | TokenTree };
 
-const toKebab = (value: string): string => value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+const toKebab = (value: string): string =>
+  value.replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
 
 /** Builds the CSS custom property name for a token path, e.g. `['color','bg']` -> `--nui-color-bg`. */
 export const cssVarName = (path: readonly string[]): string =>

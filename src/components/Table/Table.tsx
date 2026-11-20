@@ -1,3 +1,5 @@
+/* eslint-disable jsx-a11y/no-redundant-roles, jsx-a11y/no-interactive-element-to-noninteractive-role --
+   explicit roles keep table semantics when CSS switches the elements to display:block (card layout). */
 import { useMemo, type ReactNode } from 'react';
 import { cx } from '../../utils/cx';
 import { useControllableState } from '../../utils/useControllableState';
