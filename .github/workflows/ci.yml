@@ -8,8 +8,12 @@ on:
 permissions:
   contents: read
 
+env:
+  NODE_OPTIONS: --max-old-space-size=6144
+
 jobs:
   quality:
+    name: Lint, tipos e testes
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
@@ -18,16 +22,22 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
-      - name: Tokens are in sync with src/styles/tokens.css
-        run: npm run build:tokens && git diff --exit-code src/styles/tokens.css
+      - name: Tokens resolvidos estao em dia com o antd
+        run: npm run build:tokens && git diff --exit-code packages/tokens/src/resolved.generated.ts
       - run: npm run lint
+      - run: npm run format:check
       - run: npm run typecheck
-      - run: npm run test:coverage
-      - run: npm run build
-      - name: Portable site builds (relative base, hash routes)
-        run: npm run build:portable
+      - name: Testes dos tokens
+        run: npm run test:tokens
+      - name: Testes dos wrappers React (Vitest + Testing Library)
+        run: npm run test:react
+      - name: Teste de contrato (mesmos nomes de props e inputs)
+        run: npm run test:contract
+      - name: Testes dos wrappers Angular (runner do Angular)
+        run: npm run test:angular
 
-  e2e:
+  build:
+    name: Storybook dos dois frameworks e demo portatil
     runs-on: ubuntu-latest
     needs: quality
     steps:
@@ -37,9 +47,35 @@ jobs:
           node-version: 24
           cache: npm
       - run: npm ci
+      - run: npm run build:tokens
+      - run: npm run build-storybook
+      - name: Demo portatil (caminhos relativos)
+        run: npm run build:portable
+        env:
+          SKIP_STORYBOOK: '1'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: portable-dist
+          path: portable-dist
+          retention-days: 7
+
+  e2e:
+    name: E2E com axe nos Storybooks
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+      - run: npm ci
+      - uses: actions/download-artifact@v4
+        with:
+          name: portable-dist
+          path: portable-dist
       - run: npx playwright install --with-deps chromium
-      - run: npm run build:portable
-      - name: E2E with Playwright and axe
+      - name: E2E (todas as stories, claro e escuro, zero violacoes)
         run: npm run test:e2e
       - uses: actions/upload-artifact@v4
         if: failure()
