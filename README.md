@@ -168,7 +168,31 @@ arquivo com hash e rotas por hash (`#/componentes/button`). A pasta funciona ser
 
 ## Qualidade e resultados
 
-**RESULTADOS**
+Resultado real da última execução local (Windows, Chrome instalado):
+
+| Verificação                                             | Resultado                                                                                                                                                                                                                                                                                         |
+| ------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Testes unitários e de componente (Vitest)               | **230 testes em 20 arquivos, todos passando**                                                                                                                                                                                                                                                     |
+| Cobertura (v8)                                          | **99,31% de linhas e instruções, 97,43% de funções, 93,34% de ramos** (limite de 80% mantido; só testes, `src/test/` e `index.ts` de reexportação ficam fora da medição)                                                                                                                          |
+| Trechos de código da documentação                       | todos os exemplos e todos os estados do playground são compilados contra os tipos reais da biblioteca (`snippets.test.ts`)                                                                                                                                                                        |
+| E2E (Playwright + axe)                                  | **57 testes passando**: axe sem violações em 11 rotas × 2 temas e com camadas abertas (menu, combobox com e sem resultados, diálogo e paleta), sem rolagem horizontal em 360, 390, 768 e 1440 px, tabela em cartões, alvos de toque de 44 px, reload em rota interna e os fluxos dos três modelos |
+| Lint (ESLint, `--max-warnings=0`), typecheck e Prettier | sem erros                                                                                                                                                                                                                                                                                         |
+| Site (`build:portable`)                                 | blocos sob demanda por página e por componente; a documentação de cada componente é um chunk próprio                                                                                                                                                                                              |
+| Capturas                                                | 360, 768, 1024 e 1440 px nos temas claro e escuro, em 9 páginas: sem erro de console, sem 404 e sem rolagem horizontal                                                                                                                                                                            |
+
+Prova da instalação pelo GitHub: um projeto novo com `npm install github:NasckDev/nasck-ui#main` recebeu o
+`dist` (compilado pelo `prepare`), passou no `tsc`, compilou com o Vite, renderizou no servidor
+(`react-dom/server`) e, no navegador, o exemplo de "Começar" mostrou o toast ao enviar o formulário
+(`docs/prints/instalacao-github-comecar.png`).
+
+Detalhes que valem registrar:
+
+- O `color-contrast` do axe fica desligado nos testes de componente porque o jsdom não tem layout. Ele é
+  coberto pelos testes de tokens e do construtor de tema (cada par, nos dois temas) e pelo axe do E2E em
+  navegador real.
+- Camadas (diálogo, menu, dica, toast) usam uma pilha: Esc fecha só a de cima.
+- A instalação pelo GitHub leva alguns minutos (clona, instala as dependências de desenvolvimento e
+  compila); para uso contínuo, prefira publicar no registro de pacotes.
 
 ## Licença
 
