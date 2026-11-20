@@ -1,0 +1,52 @@
+{
+  "name": "@nasckdev/nasck-ui-react",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wrappers App* sobre Ant Design (React) com o contrato do Nasck UI.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "vitest run --pool=threads --maxWorkers=1",
+    "storybook": "storybook dev -p 6006 --no-open",
+    "build-storybook": "storybook build -o storybook-static --disable-telemetry"
+  },
+  "peerDependencies": {
+    "@ant-design/icons": ">=6.0.0",
+    "@nasckdev/nasck-ui-tokens": ">=1.0.0",
+    "antd": ">=6.0.0",
+    "dayjs": ">=1.11.0",
+    "echarts": ">=5.0.0",
+    "echarts-for-react": ">=3.0.0",
+    "react": ">=19.0.0",
+    "react-dom": ">=19.0.0"
+  },
+  "devDependencies": {
+    "@ant-design/icons": "6.3.4",
+    "@fontsource-variable/dm-sans": "5.3.0",
+    "@fontsource-variable/space-grotesk": "5.3.0",
+    "@fontsource/space-mono": "5.3.0",
+    "@nasckdev/nasck-ui-tokens": "1.0.0",
+    "@storybook/addon-a11y": "10.6.8",
+    "@storybook/addon-docs": "10.6.8",
+    "@storybook/react-vite": "10.6.8",
+    "@testing-library/dom": "10.4.2",
+    "@testing-library/jest-dom": "6.9.1",
+    "@testing-library/react": "16.3.3",
+    "@testing-library/user-event": "14.6.13",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "@vitejs/plugin-react": "6.3.0",
+    "antd": "6.7.1",
+    "dayjs": "1.11.23",
+    "echarts": "6.1.0",
+    "echarts-for-react": "3.1.0",
+    "jsdom": "31.0.1",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "storybook": "10.6.8",
+    "typescript": "6.0.3",
+    "vite": "8.3.8",
+    "vitest": "5.1.1"
+  }
+}
