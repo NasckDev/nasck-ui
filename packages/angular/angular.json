@@ -1,0 +1,80 @@
+{
+  "$schema": "../../node_modules/@angular/cli/lib/config/schema.json",
+  "version": 1,
+  "cli": {
+    "analytics": false
+  },
+  "projects": {
+    "nasck-ui-angular": {
+      "projectType": "application",
+      "root": ".",
+      "sourceRoot": "src",
+      "prefix": "app",
+      "architect": {
+        "build": {
+          "builder": "@angular-devkit/build-angular:browser",
+          "options": {
+            "outputPath": "dist/app",
+            "index": "src/index.html",
+            "main": "src/main.ts",
+            "polyfills": ["zone.js"],
+            "tsConfig": "tsconfig.app.json",
+            "styles": [
+              "../../node_modules/@fontsource-variable/dm-sans/wght.css",
+              "../../node_modules/@fontsource-variable/space-grotesk/wght.css",
+              "../../node_modules/@fontsource/space-mono/latin-400.css",
+              "../../node_modules/ng-zorro-antd/ng-zorro-antd.variable.min.css",
+              "src/styles/nasck-overrides.css"
+            ]
+          }
+        },
+        "test": {
+          "builder": "@angular/build:unit-test",
+          "options": {
+            "tsConfig": "tsconfig.spec.json",
+            "runner": "vitest",
+            "buildTarget": "nasck-ui-angular:test-build:development",
+            "include": ["src/**/*.spec.ts"]
+          }
+        },
+        "storybook": {
+          "builder": "@storybook/angular:start-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "nasck-ui-angular:build",
+            "compodoc": false,
+            "tsConfig": ".storybook/tsconfig.json",
+            "port": 6007,
+            "open": false
+          }
+        },
+        "build-storybook": {
+          "builder": "@storybook/angular:build-storybook",
+          "options": {
+            "configDir": ".storybook",
+            "browserTarget": "nasck-ui-angular:build",
+            "compodoc": false,
+            "tsConfig": ".storybook/tsconfig.json",
+            "outputDir": "storybook-static"
+          }
+        },
+        "test-build": {
+          "builder": "@angular/build:application",
+          "options": {
+            "browser": "src/main.ts",
+            "tsConfig": "tsconfig.spec.json",
+            "polyfills": ["zone.js"],
+            "styles": []
+          },
+          "configurations": {
+            "development": {
+              "optimization": false,
+              "sourceMap": true
+            }
+          },
+          "defaultConfiguration": "development"
+        }
+      }
+    }
+  }
+}

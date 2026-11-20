@@ -1,0 +1,53 @@
+{
+  "name": "@nasckdev/nasck-ui-angular",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wrappers standalone App* sobre NG-ZORRO com o contrato do Nasck UI.",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "typecheck": "ngc -p tsconfig.json --noEmit",
+    "test": "ng test --no-watch",
+    "storybook": "ng run nasck-ui-angular:storybook",
+    "build-storybook": "ng run nasck-ui-angular:build-storybook"
+  },
+  "peerDependencies": {
+    "@angular/core": ">=22.0.0",
+    "@nasckdev/nasck-ui-tokens": ">=1.0.0",
+    "echarts": ">=5.0.0",
+    "ng-zorro-antd": ">=22.0.0",
+    "ngx-echarts": ">=22.0.0"
+  },
+  "devDependencies": {
+    "@angular-devkit/build-angular": "22.3.0",
+    "@angular/build": "22.3.0",
+    "@angular/cli": "22.3.0",
+    "@angular/common": "22.3.0",
+    "@angular/compiler": "22.3.0",
+    "@angular/compiler-cli": "22.3.0",
+    "@angular/core": "22.3.0",
+    "@angular/forms": "22.3.0",
+    "@angular/platform-browser": "22.3.0",
+    "@angular/platform-browser-dynamic": "22.3.0",
+    "@angular/router": "22.3.0",
+    "@ant-design/icons-angular": "22.1.1",
+    "@fontsource-variable/dm-sans": "5.3.0",
+    "@fontsource-variable/space-grotesk": "5.3.0",
+    "@fontsource/space-mono": "5.3.0",
+    "@nasckdev/nasck-ui-tokens": "1.0.0",
+    "@storybook/addon-a11y": "10.6.8",
+    "@storybook/addon-docs": "10.6.8",
+    "@storybook/angular": "10.6.8",
+    "date-fns": "4.4.0",
+    "echarts": "6.1.0",
+    "jsdom": "31.0.1",
+    "ng-zorro-antd": "22.2.0",
+    "ngx-echarts": "22.0.0",
+    "rxjs": "7.8.2",
+    "storybook": "10.6.8",
+    "tslib": "2.8.1",
+    "typescript": "6.0.3",
+    "vitest": "5.1.1",
+    "zone.js": "0.16.3"
+  }
+}
