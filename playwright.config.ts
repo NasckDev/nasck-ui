@@ -1,6 +1,7 @@
 import { defineConfig } from '@playwright/test';
 
-const PORT = 4173;
+// E2E_PORT permite rodar ao lado de outro servidor que ja ocupe a 4173.
+const PORT = Number(process.env['E2E_PORT'] ?? 4173);
 const channel = process.env['PW_CHANNEL'];
 
 export default defineConfig({

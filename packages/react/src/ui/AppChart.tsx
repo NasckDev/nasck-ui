@@ -93,29 +93,32 @@ export function AppChart({
           opts={{ renderer: 'canvas' }}
         />
       </div>
-      <table style={visuallyHidden}>
-        <caption>{description}</caption>
-        <thead>
-          <tr>
-            <th scope="col">Categoria</th>
-            {series.map((serie) => (
-              <th scope="col" key={serie.name}>
-                {serie.name}
-              </th>
-            ))}
-          </tr>
-        </thead>
-        <tbody>
-          {categories.map((category, index) => (
-            <tr key={category}>
-              <th scope="row">{category}</th>
+      {/* A tabela ignora width: 1px; o bloco em volta e que esconde e corta. */}
+      <div style={visuallyHidden}>
+        <table>
+          <caption>{description}</caption>
+          <thead>
+            <tr>
+              <th scope="col">Categoria</th>
               {series.map((serie) => (
-                <td key={serie.name}>{formatValue(serie.data[index] ?? 0, valueFormat)}</td>
+                <th scope="col" key={serie.name}>
+                  {serie.name}
+                </th>
               ))}
             </tr>
-          ))}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {categories.map((category, index) => (
+              <tr key={category}>
+                <th scope="row">{category}</th>
+                {series.map((serie) => (
+                  <td key={serie.name}>{formatValue(serie.data[index] ?? 0, valueFormat)}</td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
     </figure>
   );
 }

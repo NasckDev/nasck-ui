@@ -11,6 +11,9 @@ export interface AppCardProps {
   children?: ReactNode;
 }
 
+// O antd corta o titulo com reticencias; aqui ele quebra linha para nunca esconder texto.
+const TITLE_STYLE = { whiteSpace: 'normal', overflowWrap: 'anywhere' } as const;
+
 export function AppCard({
   title,
   extra,
@@ -28,6 +31,7 @@ export function AppCard({
       variant={bordered ? 'outlined' : 'borderless'}
       hoverable={hoverable}
       size={size}
+      styles={{ title: TITLE_STYLE }}
     >
       {children}
     </Card>
