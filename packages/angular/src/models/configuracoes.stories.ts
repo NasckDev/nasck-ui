@@ -47,7 +47,7 @@ const meta: Meta<ConfiguracoesArgs> = {
       ],
     },
     template: `
-      <div style="display:grid;gap:16px;max-width:760px">
+      <div style="display:grid;gap:16px;max-width:760px;grid-template-columns:minmax(0,1fr)">
         <h1 style="margin:0">Configurações da conta</h1>
         <app-tabs [items]="tabs" activeKey="perfil" />
         @if (erro) {

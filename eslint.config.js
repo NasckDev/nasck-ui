@@ -52,7 +52,7 @@ export default tseslint.config(
     rules: { 'no-restricted-imports': ['error', { patterns: LIBRARY_IMPORTS }] },
   },
   {
-    files: ['packages/react/**/*.{ts,tsx}'],
+    files: ['packages/react/**/*.{ts,tsx}', 'portable-src/**/*.{ts,tsx}'],
     plugins: { 'react-hooks': reactHooks, 'jsx-a11y': jsxA11y },
     rules: {
       ...reactHooks.configs.recommended.rules,

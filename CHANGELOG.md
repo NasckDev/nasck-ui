@@ -1,5 +1,22 @@
 # Changelog
 
+## Não lançado
+
+Identidade "planta técnica" ([ADR 0005](./docs/adr/0005-identidade-planta-tecnica.md)), sem mudança
+na API dos componentes.
+
+- Preset `nasck` com laranja `#F0501C`, texto `#160700` sobre ele, raio de 3 px, bordas em grafite e
+  fontes Geist e Geist Mono. Os outros presets não mudam.
+- Presets podem definir `onPrimary`, `link` e `border`, sempre com o ajuste de contraste AA.
+- Storybooks React e Angular com o mesmo tema (claro ou escuro conforme o sistema).
+- Página de entrada nova, buildada pelo Vite, com espécimes reais dos wrappers React e números lidos
+  do repositório.
+- Correções de layout em tela estreita: a tabela acessível do `AppChart` alargava a página (React e
+  Angular), o `AppPagination` não quebrava linha, o título do `AppCard` era cortado com reticências e a
+  tabela de props das páginas de docs vazava. Novo E2E de larguras (320 a 1920 px).
+- Angular: etiquetas do `AppSelect` múltiplo e o campo desabilitado ficavam com texto claro sobre o
+  fundo fixo do NG-ZORRO no tema escuro.
+
 ## 1.0.0
 
 Reestruturação completa: o Nasck UI deixa de ser um design system React escrito do zero e passa a ser

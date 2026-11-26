@@ -64,6 +64,11 @@ describe('AppTable', () => {
 });
 
 describe('AppStatistic, AppCard, AppTag, AppStatus', () => {
+  it('wraps a long card title instead of cutting it with an ellipsis', () => {
+    const { container } = render(<AppCard title="28 componentes no contrato">ok</AppCard>);
+    expect(container.querySelector('.ant-card-head-title')).toHaveStyle({ whiteSpace: 'normal' });
+  });
+
   it('formats the number in pt-BR and announces the trend', () => {
     render(<AppStatistic title="Receita" value={66400} precision={2} prefix="R$ " trend="up" />);
     expect(screen.getByText('Receita')).toBeInTheDocument();
@@ -210,6 +215,11 @@ describe('AppTabs, AppSteps, AppMenu, AppDropdown, AppPagination', () => {
     await userEvent.click(screen.getByText('2'));
     expect(onChange).toHaveBeenCalledWith(2, 10);
   });
+
+  it('lets the page buttons wrap instead of widening a narrow screen', () => {
+    const { container } = render(<AppPagination total={85} pageSize={10} current={1} />);
+    expect(container.querySelector('.ant-pagination')).toHaveStyle({ flexWrap: 'wrap' });
+  });
 });
 
 describe('feedback components', () => {
@@ -276,6 +286,18 @@ describe('AppChart', () => {
     const table = screen.getByRole('table', { name: 'Receita em alta' });
     expect(within(table).getByRole('rowheader', { name: 'fev' })).toBeInTheDocument();
     expect(within(table).getByText(/R\$\s?2\.000,00/)).toBeInTheDocument();
+  });
+
+  it('keeps the data table inside a 1px box, so a wide table never widens the page', () => {
+    render(<AppChart {...props} ariaLabel="Receita em alta" />);
+    const table = screen.getByRole('table', { name: 'Receita em alta' });
+    // Uma tabela ignora width: 1px; quem esconde e corta precisa ser um bloco em volta dela.
+    expect(table.style.position).toBe('');
+    expect(table.parentElement).toHaveStyle({
+      position: 'absolute',
+      width: '1px',
+      overflow: 'hidden',
+    });
   });
 
   it('shows the empty message with no data', () => {

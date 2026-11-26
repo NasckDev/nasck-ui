@@ -62,31 +62,34 @@ echarts.use([
         <div role="img" [attr.aria-label]="description()">
           <div echarts [options]="option()" [style.height.px]="height()" style="width: 100%"></div>
         </div>
-        <table class="sr-only">
-          <caption>
-            {{
-              description()
-            }}
-          </caption>
-          <thead>
-            <tr>
-              <th scope="col">Categoria</th>
-              @for (serie of series(); track serie.name) {
-                <th scope="col">{{ serie.name }}</th>
-              }
-            </tr>
-          </thead>
-          <tbody>
-            @for (category of categories(); track category; let i = $index) {
+        <!-- A tabela ignora width: 1px; o bloco em volta e que esconde e corta. -->
+        <div class="sr-only">
+          <table>
+            <caption>
+              {{
+                description()
+              }}
+            </caption>
+            <thead>
               <tr>
-                <th scope="row">{{ category }}</th>
+                <th scope="col">Categoria</th>
                 @for (serie of series(); track serie.name) {
-                  <td>{{ format(serie.data[i] ?? 0) }}</td>
+                  <th scope="col">{{ serie.name }}</th>
                 }
               </tr>
-            }
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              @for (category of categories(); track category; let i = $index) {
+                <tr>
+                  <th scope="row">{{ category }}</th>
+                  @for (serie of series(); track serie.name) {
+                    <td>{{ format(serie.data[i] ?? 0) }}</td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
       </figure>
     }
   `,

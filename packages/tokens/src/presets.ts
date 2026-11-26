@@ -12,6 +12,10 @@ export interface ModeSurface {
   readonly bgContainer: string;
   readonly text: string;
   readonly semantic: SemanticColors;
+  /** Cor inicial de links e texto de destaque (ajustada para AA se precisar). Padrao: a primaria. */
+  readonly link?: string;
+  /** Cor da borda de campos (ajustada para 3:1 se precisar). Padrao: derivada do texto. */
+  readonly border?: string;
 }
 
 export interface PalettePreset {
@@ -20,6 +24,8 @@ export interface PalettePreset {
   readonly description: string;
   /** Cor de marca (#RRGGBB). */
   readonly primary: string;
+  /** Texto sobre a primaria. So vale se passar 4,5:1; senao o tema usa preto ou branco. */
+  readonly onPrimary?: string;
   readonly radius: number;
   readonly light: ModeSurface;
   readonly dark: ModeSurface;
@@ -39,21 +45,36 @@ const SAFE_DARK: SemanticColors = {
   info: '#60A5FA',
 };
 
-export const FONT_FAMILY =
-  "'DM Sans Variable', 'DM Sans', system-ui, -apple-system, 'Segoe UI', sans-serif";
-export const FONT_FAMILY_HEADING =
-  "'Space Grotesk Variable', 'Space Grotesk', 'DM Sans Variable', system-ui, sans-serif";
-export const FONT_FAMILY_CODE = "'Space Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace";
+export const FONT_FAMILY = "'Geist Variable', 'Geist', Arial, system-ui, -apple-system, sans-serif";
+export const FONT_FAMILY_HEADING = FONT_FAMILY;
+export const FONT_FAMILY_CODE =
+  "'Geist Mono Variable', 'Geist Mono', ui-monospace, 'SFMono-Regular', Consolas, monospace";
 
 export const presets: readonly PalettePreset[] = [
   {
     id: 'nasck',
-    label: 'Nasck (monocromatico + laranja)',
-    description: 'Tinta e papel com a assinatura laranja. Texto sobre o laranja e sempre escuro.',
-    primary: '#FF5B14',
-    radius: 4,
-    light: { bgLayout: '#F5F5F5', bgContainer: '#FFFFFF', text: '#0A0A0A', semantic: SAFE_LIGHT },
-    dark: { bgLayout: '#0A0A0A', bgContainer: '#141414', text: '#F5F5F5', semantic: SAFE_DARK },
+    label: 'Nasck (planta técnica)',
+    description:
+      'Grafite e papel com a assinatura laranja. Texto sobre o laranja é sempre #160700, nunca branco.',
+    primary: '#F0501C',
+    onPrimary: '#160700',
+    radius: 3,
+    light: {
+      bgLayout: '#FAFAF7',
+      bgContainer: '#FFFFFF',
+      text: '#111111',
+      link: '#C73D10',
+      border: '#111111',
+      semantic: SAFE_LIGHT,
+    },
+    dark: {
+      bgLayout: '#121110',
+      bgContainer: '#1A1917',
+      text: '#FAFAF7',
+      link: '#FF8A5C',
+      border: '#A8A39B',
+      semantic: SAFE_DARK,
+    },
   },
   {
     id: 'insighthub',

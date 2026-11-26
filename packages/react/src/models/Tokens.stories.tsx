@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from '@storybook/react-vite';
 import { checkTheme, type ResolvedTokens } from '@nasckdev/nasck-ui-tokens';
 import type { ReactElement } from 'react';
 import { useThemeTokens } from '../ui/AppThemeProvider.tsx';
+import { DocHeader } from './DocHeader.tsx';
 
 const KEYS = [
   'colorPrimary',
@@ -22,17 +23,18 @@ function Tokens(): ReactElement {
   const flat = useThemeTokens();
   const checks = checkTheme(flat as ResolvedTokens);
   return (
-    <div style={{ display: 'grid', gap: 16, maxWidth: 1000 }}>
-      <h1 style={{ margin: 0 }}>Tokens do tema</h1>
-      <p style={{ margin: 0 }}>
+    <div
+      style={{ display: 'grid', gap: 16, maxWidth: 1000, gridTemplateColumns: 'minmax(0, 1fr)' }}
+    >
+      <DocHeader label="Tema / Tokens" title="Tokens do tema">
         Troque o preset e o modo na barra de ferramentas. Os valores abaixo são os tokens resolvidos
         pelo antd para o tema atual.
-      </p>
+      </DocHeader>
       <div
         style={{
           display: 'grid',
           gap: 12,
-          gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fill, minmax(min(220px, 100%), 1fr))',
         }}
       >
         {KEYS.map((key) => (

@@ -22,6 +22,8 @@ export function AppPagination({
 }: AppPaginationProps): ReactElement {
   return (
     <Pagination
+      // Em tela estreita os botoes quebram linha em vez de alargar a pagina.
+      style={{ flexWrap: 'wrap', rowGap: 8 }}
       current={current}
       total={total}
       pageSize={pageSize}

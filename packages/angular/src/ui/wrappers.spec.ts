@@ -289,6 +289,18 @@ describe('AppChart and theme', () => {
     expect(table?.textContent).toMatch(/R\$\s?2\.000,00/);
   });
 
+  it('keeps the data table inside a 1px box, so a wide table never widens the page', () => {
+    TestBed.configureTestingModule({ imports: [AppChartComponent], providers: [provideNasckUi()] });
+    const fixture = TestBed.createComponent(AppChartComponent);
+    fixture.componentRef.setInput('categories', ['jan', 'fev']);
+    fixture.componentRef.setInput('series', [{ name: 'Receita', data: [1000, 2000] }]);
+    fixture.detectChanges();
+    const table = root(fixture).querySelector('table');
+    // Uma tabela ignora width: 1px; quem esconde e corta precisa ser um bloco em volta dela.
+    expect(table?.classList.contains('sr-only')).toBe(false);
+    expect(table?.parentElement?.classList.contains('sr-only')).toBe(true);
+  });
+
   it('shows the empty message with no data', async () => {
     const fixture = await setup(AppChartComponent, {
       categories: [],
