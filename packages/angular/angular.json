@@ -20,9 +20,8 @@
             "polyfills": ["zone.js"],
             "tsConfig": "tsconfig.app.json",
             "styles": [
-              "../../node_modules/@fontsource-variable/dm-sans/wght.css",
-              "../../node_modules/@fontsource-variable/space-grotesk/wght.css",
-              "../../node_modules/@fontsource/space-mono/latin-400.css",
+              "../../node_modules/@fontsource-variable/geist/wght.css",
+              "../../node_modules/@fontsource-variable/geist-mono/wght.css",
               "../../node_modules/ng-zorro-antd/ng-zorro-antd.variable.min.css",
               "src/styles/nasck-overrides.css"
             ]

@@ -5,7 +5,7 @@
  * resolvidos do pacote de tokens (variáveis --ant-color-*), nos modos claro e escuro.
  */
 :root {
-  --nasck-font-heading: 'Space Grotesk Variable', 'Space Grotesk', 'DM Sans Variable', system-ui, sans-serif;
+  --nasck-font-heading: var(--ant-font-family, 'Geist Variable', 'Geist', Arial, sans-serif);
   --nasck-on-error: #fff;
 }
 
@@ -13,7 +13,7 @@ html,
 body {
   background: var(--ant-color-bg-layout, #f5f5f5);
   color: var(--ant-color-text, #0a0a0a);
-  font-family: var(--ant-font-family, 'DM Sans Variable', system-ui, sans-serif);
+  font-family: var(--ant-font-family, 'Geist Variable', 'Geist', Arial, sans-serif);
 }
 
 h1,
@@ -32,7 +32,7 @@ a {
 
 code,
 pre {
-  font-family: var(--ant-font-family-code, 'Space Mono', monospace);
+  font-family: var(--ant-font-family-code, 'Geist Mono Variable', 'Geist Mono', monospace);
 }
 
 :focus-visible {
@@ -125,7 +125,7 @@ pre {
 .ant-input-disabled,
 .ant-input[disabled],
 .ant-picker-disabled,
-.ant-select-disabled:not(.ant-select-customize-input) .ant-select-selector {
+.ant-select.ant-select-disabled:not(.ant-select-customize-input) .ant-select-selector {
   background: var(--ant-color-bg-layout);
   color: var(--ant-color-text-description);
 }
@@ -149,9 +149,15 @@ pre {
 .ant-picker-clear {
   background: var(--ant-color-bg-container);
 }
-.ant-select-selection-overflow-item .ant-select-selection-item {
+/* Seletores mais fortes que os do NG-ZORRO, que fixam #f5f5f5 no fundo das etiquetas e do
+   campo desabilitado (no escuro o texto claro ficava sobre fundo claro). */
+.ant-select.ant-select-multiple .ant-select-selection-overflow-item .ant-select-selection-item {
   background: var(--ant-color-bg-layout);
   border-color: var(--ant-color-border-secondary);
+  color: var(--ant-color-text);
+}
+.ant-select.ant-select-disabled .ant-select-selection-item {
+  color: var(--ant-color-text-description);
 }
 .ant-select-selection-item-remove {
   color: var(--ant-color-text-secondary);
@@ -253,6 +259,11 @@ pre {
   color: var(--ant-color-text);
   border-bottom-color: var(--ant-color-border-secondary);
   font-family: var(--nasck-font-heading);
+}
+/* O titulo quebra linha em vez de ser cortado com reticencias. */
+.ant-card-head-title {
+  white-space: normal;
+  overflow-wrap: anywhere;
 }
 .ant-card-extra {
   color: var(--ant-color-text-secondary);

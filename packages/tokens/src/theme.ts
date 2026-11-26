@@ -1,4 +1,4 @@
-import { AA_UI, blend, ensureContrast, readableOn } from './contrast.ts';
+import { AA_UI, blend, contrastRatio, ensureContrast, readableOn } from './contrast.ts';
 import {
   FONT_FAMILY,
   FONT_FAMILY_CODE,
@@ -28,6 +28,14 @@ export interface BuildThemeOptions {
 const MIN_TEXT = 4.6;
 const SEMANTIC_ON_TINT = 5.2;
 
+/** Texto sobre a primaria: o do preset quando passa AA, senao preto ou branco. */
+function textOn(color: string, preferred: string | undefined): string {
+  if (preferred !== undefined && contrastRatio(preferred, color) >= MIN_TEXT) {
+    return preferred.toUpperCase();
+  }
+  return readableOn(color);
+}
+
 /**
  * Gera o tema do antd a partir de um preset e de um modo. Os tokens de texto, link e
  * semanticos saem ja ajustados para contraste AA contra os fundos do modo escolhido.
@@ -46,9 +54,9 @@ export function buildTheme(
   // No escuro a cor primaria precisa de 3:1 contra o fundo para valer como componente e foco.
   const surfacePrimary = mode === 'dark' ? ensureContrast(requested, container, AA_UI) : requested;
   // Se nem preto nem branco passa 4.5:1 sobre a primaria, ela e ajustada o minimo necessario.
-  const textOnBase = readableOn(surfacePrimary);
+  const textOnBase = textOn(surfacePrimary, base.onPrimary);
   const primary = ensureContrast(surfacePrimary, textOnBase, MIN_TEXT);
-  const onPrimary = readableOn(primary);
+  const onPrimary = textOn(primary, base.onPrimary);
   const surfaces = [container, surface.bgLayout];
   const onSurfaces = (color: string, minimum: number): string =>
     surfaces.reduce((current, background) => ensureContrast(current, background, minimum), color);
@@ -57,11 +65,14 @@ export function buildTheme(
   const tintAlpha = mode === 'dark' ? 0.2 : 0.12;
   const tint = (color: string, extra = 0): string => blend(color, container, tintAlpha + extra);
   const primaryTint = tint(primary);
-  const link = ensureContrast(onSurfaces(requested, MIN_TEXT), primaryTint, MIN_TEXT);
+  // O link do preset so vale com a primaria do preset; outra cor escolhida no construtor manda.
+  const presetPrimary = requested.toUpperCase() === base.primary.toUpperCase();
+  const linkBase = presetPrimary ? (surface.link ?? requested) : requested;
+  const link = ensureContrast(onSurfaces(linkBase, MIN_TEXT), primaryTint, MIN_TEXT);
   const text = surface.text;
   const secondary = onSurfaces(blend(text, container, 0.82), MIN_TEXT);
   const description = onSurfaces(blend(text, container, 0.7), MIN_TEXT);
-  const border = ensureContrast(blend(text, container, 0.4), container, AA_UI);
+  const border = ensureContrast(surface.border ?? blend(text, container, 0.4), container, AA_UI);
   const borderSecondary = blend(text, container, mode === 'dark' ? 0.18 : 0.12);
   // Cores semanticas valem como texto sobre as duas superficies e sobre o proprio tom claro.
   const semantic = (color: string): string => {

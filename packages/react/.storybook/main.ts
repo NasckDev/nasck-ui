@@ -11,9 +11,8 @@ const config: StorybookConfig = {
   stories: ['../src/**/*.stories.@(ts|tsx)'],
   addons: ['@storybook/addon-a11y', '@storybook/addon-docs'],
   staticDirs: [
-    { from: fontDir('@fontsource-variable/space-grotesk'), to: '/fonts/space-grotesk' },
-    { from: fontDir('@fontsource-variable/dm-sans'), to: '/fonts/dm-sans' },
-    { from: fontDir('@fontsource/space-mono'), to: '/fonts/space-mono' },
+    { from: fontDir('@fontsource-variable/geist'), to: '/fonts/geist' },
+    { from: fontDir('@fontsource-variable/geist-mono'), to: '/fonts/geist-mono' },
   ],
   core: { disableTelemetry: true },
   viteFinal: (viteConfig) => ({ ...viteConfig, base: './' }),

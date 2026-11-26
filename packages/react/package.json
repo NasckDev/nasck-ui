@@ -23,9 +23,8 @@
   },
   "devDependencies": {
     "@ant-design/icons": "6.3.4",
-    "@fontsource-variable/dm-sans": "5.3.0",
-    "@fontsource-variable/space-grotesk": "5.3.0",
-    "@fontsource/space-mono": "5.3.0",
+    "@fontsource-variable/geist": "5.3.0",
+    "@fontsource-variable/geist-mono": "5.3.0",
     "@nasckdev/nasck-ui-tokens": "1.0.0",
     "@storybook/addon-a11y": "10.6.8",
     "@storybook/addon-docs": "10.6.8",

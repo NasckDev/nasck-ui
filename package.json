@@ -28,6 +28,7 @@
     "storybook:angular": "npm run storybook -w @nasckdev/nasck-ui-angular",
     "build-storybook": "npm run build-storybook -w @nasckdev/nasck-ui-react && npm run build-storybook -w @nasckdev/nasck-ui-angular",
     "build:portable": "node scripts/build-portable.mjs",
+    "dev:portable": "vite --config portable-src/vite.config.ts",
     "test:e2e": "playwright test"
   },
   "devDependencies": {

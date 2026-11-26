@@ -17,7 +17,7 @@ function str(tokens: ResolvedTokens, key: string, fallback: string): string {
 
 export function chartPalette(tokens: ResolvedTokens): string[] {
   return [
-    str(tokens, 'colorPrimary', '#FF5B14'),
+    str(tokens, 'colorPrimary', '#F0501C'),
     str(tokens, 'colorInfo', '#1D4ED8'),
     str(tokens, 'colorSuccess', '#15803D'),
     str(tokens, 'colorWarning', '#9A5B00'),
@@ -33,7 +33,7 @@ export function buildChartOption(
   input: ChartInput,
   tokens: ResolvedTokens,
 ): Record<string, unknown> {
-  const text = str(tokens, 'colorText', '#0A0A0A');
+  const text = str(tokens, 'colorText', '#111111');
   const muted = str(tokens, 'colorTextSecondary', '#444444');
   const grid = str(tokens, 'colorBorderSecondary', '#E5E5E5');
   const container = str(tokens, 'colorBgContainer', '#FFFFFF');

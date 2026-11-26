@@ -1,12 +1,13 @@
-import '@fontsource-variable/dm-sans/wght.css';
-import '@fontsource-variable/space-grotesk/wght.css';
-import '@fontsource/space-mono/latin-400.css';
+import '@fontsource-variable/geist/wght.css';
+import '@fontsource-variable/geist-mono/wght.css';
 import type { Decorator, Preview } from '@storybook/react-vite';
 import { presets, type ThemeMode } from '@nasckdev/nasck-ui-tokens';
 import type { ReactElement, ReactNode } from 'react';
 import { AppThemeProvider, useThemeTokens } from '../src/ui/AppThemeProvider.tsx';
+import { nasckTheme, prefersDark } from './nasck-theme';
 
-function Frame({ children }: { children: ReactNode }): ReactElement {
+/** Na pagina de docs a story fica dentro do bloco, sem ocupar a altura da tela. */
+function Frame({ children, inDocs }: { children: ReactNode; inDocs: boolean }): ReactElement {
   const token = useThemeTokens();
   return (
     <div
@@ -15,7 +16,7 @@ function Frame({ children }: { children: ReactNode }): ReactElement {
         color: String(token['colorText']),
         fontFamily: String(token['fontFamily']),
         padding: Number(token['paddingLG']),
-        minHeight: '100vh',
+        minHeight: inDocs ? undefined : '100vh',
         boxSizing: 'border-box',
       }}
     >
@@ -31,7 +32,7 @@ const withNasckTheme: Decorator = (Story, context) => {
   if (typeof document !== 'undefined') document.documentElement.dataset['theme'] = mode;
   return (
     <AppThemeProvider preset={preset} mode={mode} density={density}>
-      <Frame>
+      <Frame inDocs={context.viewMode === 'docs'}>
         <Story />
       </Frame>
     </AppThemeProvider>
@@ -40,7 +41,7 @@ const withNasckTheme: Decorator = (Story, context) => {
 
 const preview: Preview = {
   decorators: [withNasckTheme],
-  initialGlobals: { preset: 'nasck', mode: 'light', density: 'default' },
+  initialGlobals: { preset: 'nasck', mode: prefersDark() ? 'dark' : 'light', density: 'default' },
   globalTypes: {
     preset: {
       description: 'Preset de paleta',
@@ -80,6 +81,7 @@ const preview: Preview = {
     layout: 'fullscreen',
     controls: { expanded: true, matchers: { date: /Date$/ } },
     a11y: { test: 'error' },
+    docs: { theme: nasckTheme() },
     options: { storySort: { order: ['Visão geral', 'Componentes', 'Modelos', 'Tema'] } },
   },
   tags: ['autodocs'],

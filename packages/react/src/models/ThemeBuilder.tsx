@@ -1,5 +1,7 @@
 import {
+  DEFAULT_PRESET_ID,
   buildTheme,
+  getPreset,
   checkTheme,
   presets,
   toCssText,
@@ -16,8 +18,10 @@ import { AppStatus, AppTag } from '../ui/AppTag.tsx';
 import { AppSwitch } from '../ui/AppSwitch.tsx';
 import { AppTabs } from '../ui/AppTabs.tsx';
 import { AppThemeScope, resolveTokens, useThemeTokens } from '../ui/AppThemeProvider.tsx';
+import { DocHeader } from './DocHeader.tsx';
 
 const HEX = /^#[0-9a-fA-F]{6}$/;
+const DEFAULT_PRIMARY = getPreset(DEFAULT_PRESET_ID).primary;
 const SWATCH_KEYS = [
   'colorPrimary',
   'colorPrimaryHover',
@@ -36,9 +40,9 @@ const SWATCH_KEYS = [
 ] as const;
 
 export function ThemeBuilder(): ReactElement {
-  const [presetId, setPresetId] = useState('nasck');
-  const [primary, setPrimary] = useState('#FF5B14');
-  const [draft, setDraft] = useState('#FF5B14');
+  const [presetId, setPresetId] = useState(DEFAULT_PRESET_ID);
+  const [primary, setPrimary] = useState(DEFAULT_PRIMARY);
+  const [draft, setDraft] = useState(DEFAULT_PRIMARY);
   const [dark, setDark] = useState(false);
   const mode: ThemeMode = dark ? 'dark' : 'light';
 
@@ -68,17 +72,18 @@ export function ThemeBuilder(): ReactElement {
   };
 
   return (
-    <div style={{ display: 'grid', gap: 16, maxWidth: 1200 }}>
-      <h1 style={{ margin: 0 }}>Construtor de tema</h1>
-      <p style={{ margin: 0 }}>
+    <div
+      style={{ display: 'grid', gap: 16, maxWidth: 1200, gridTemplateColumns: 'minmax(0, 1fr)' }}
+    >
+      <DocHeader label="Tema / Construtor" title="Construtor de tema">
         Escolha a cor primária. O tema do Ant Design é gerado na hora, o contraste AA é verificado
         nos pares de cor e você exporta o resultado para React ou Angular.
-      </p>
+      </DocHeader>
       <div
         style={{
           display: 'grid',
           gap: 16,
-          gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+          gridTemplateColumns: 'repeat(auto-fit, minmax(min(300px, 100%), 1fr))',
         }}
       >
         <AppCard title="1. Escolha a cor">
@@ -103,7 +108,7 @@ export function ThemeBuilder(): ReactElement {
                     padding: '6px 10px',
                     width: 120,
                     border: '1px solid currentColor',
-                    borderRadius: 4,
+                    borderRadius: 3,
                     background: 'transparent',
                     color: 'inherit',
                   }}
@@ -197,7 +202,7 @@ export function ThemeBuilder(): ReactElement {
           style={{
             display: 'grid',
             gap: 8,
-            gridTemplateColumns: 'repeat(auto-fill, minmax(190px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(190px, 100%), 1fr))',
           }}
         >
           {SWATCH_KEYS.map((key) => {
@@ -235,7 +240,7 @@ export function ThemeBuilder(): ReactElement {
               fontFamily: 'var(--ant-font-family-code, monospace)',
               fontSize: 13,
               border: '1px solid currentColor',
-              borderRadius: 4,
+              borderRadius: 3,
             }}
           >
             {current?.content}
